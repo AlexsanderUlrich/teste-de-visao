@@ -1,9 +1,10 @@
 import customtkinter as ctk
+from PIL import Image
 
 class SelecaoDeTestesView(ctk.CTkFrame):
     def __init__(self, master=None, **kwargs):
         super().__init__(master, **kwargs)
-        self.configure(fg_color="white")  # Azul claro
+        self.configure(fg_color="white")
         self.grid(row=0, column=0, sticky="nsew")
 
         # Layout da página toda expansível
@@ -25,24 +26,29 @@ class SelecaoDeTestesView(ctk.CTkFrame):
 
         # Lista de cards
         self.adicionar_cards([
-            {"icone": "👁️", "titulo": "Encontre a abertura", "descricao": "Verifique a nitidez da sua visão com o nosso teste de acuidade visual."},
-            {"icone": "🌈", "titulo": "Olhe para o arco-íris.", "descricao": "Consegue distinguir claramente as cores? O nosso teste da visão cromática vai determinar até que ponto."},
-            {"icone": "🔍", "titulo": "Olhe para o ponto", "descricao": "O teste do campo visual consegue detetar problemas com o seu campo visual."}
+            {"icone": "assets/abertura_icone.png", "titulo": "Encontre a abertura", "descricao": "Verifique a nitidez da sua visão com o nosso teste de acuidade visual."},
+            {"icone": "assets/daltonismo_icone.png", "titulo": "Olhe para o arco-íris.", "descricao": "Consegue distinguir claramente as cores? O nosso teste da visão cromática vai determinar até que ponto."},
+            {"icone": "assets/olhePonto_icone.png", "titulo": "Olhe para o ponto", "descricao": "O teste do campo visual consegue detetar problemas com o seu campo visual."}
         ])
 
     # Criação do estilo do componente Card
     def criar_card(self, parent, card_data):
 
         # Criando o card
-        card_frame = ctk.CTkFrame(parent, fg_color="white", width=500, height=500, corner_radius=20, border_width=1, border_color="#0078ff")
+        card_frame = ctk.CTkFrame(parent, fg_color="white", width=500, height=350, corner_radius=20, border_width=1, border_color="#0078ff")
         card_frame.place(x=0, y=0)        
         card_frame.grid_propagate(False)  # Impede que o card se ajuste ao conteúdo
         card_frame.grid_columnconfigure(0, weight=1)
         card_frame.grid_rowconfigure(0, weight=1)
         card_frame.grid_rowconfigure(3, weight=1)
 
-        # Ícone
-        ctk.CTkLabel(card_frame, text=card_data.get("icone", "📄"), font=ctk.CTkFont(size=100)).grid(row=0, column=0, pady=(10, 0), sticky="n")
+        # Imagem do card
+        image_path = card_data.get("icone")
+        if image_path:
+            img = Image.open(image_path)
+            img = img.resize((100, 100), Image.Resampling.LANCZOS)
+            ctk_image = ctk.CTkImage(light_image=img, dark_image=img, size=(70, 70))
+            ctk.CTkLabel(card_frame, image=ctk_image, text="").grid(row=0, column=0, pady=(10, 0), sticky="ns")
 
         # Título
         ctk.CTkLabel(card_frame, text=card_data.get("titulo", "Título"), font=ctk.CTkFont(size=30, family='Helvetica', weight="bold")).grid(row=1, column=0)
