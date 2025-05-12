@@ -3,8 +3,9 @@ import tkinter as tk
 
 
 class HomeView(Frame):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, master=None, controller=None, **kwargs):
+        super().__init__(master, **kwargs)
+        self.controller = controller
         self.grid(row=0, column=0, sticky="nsew")  # Garantir que ocupe toda a tela
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
@@ -63,7 +64,8 @@ class HomeView(Frame):
             borderwidth=1,
             padx=20,
             pady=10,
-            width=40
+            width=40,
+            command=self.controller.ir_para_selecao
         ).pack()
 
 if __name__ == "__main__":

@@ -2,11 +2,16 @@ from typing import TypedDict
 
 from .root import Root
 from .home import HomeView
-
+from .selecao_de_testes import SelecaoDeTestesView
+from .disclaimer import DisclaimerView
+from .instrucoes_daltonismo import InstrucoesDaltonismoView
 
 class Frames(TypedDict):
 
     home: HomeView
+    selecaoDeTestes: SelecaoDeTestesView
+    disclaimer: DisclaimerView
+    instrucoesDaltonismo: InstrucoesDaltonismoView
 
 
 class View:
@@ -14,7 +19,9 @@ class View:
         self.root = Root()
         self.frames: Frames = {}
 
-        self._add_frame(HomeView, "home")
+        self._add_frame(SelecaoDeTestesView, "selecaoDeTestes")
+        self._add_frame(DisclaimerView, "disclaimer")
+        self._add_frame(InstrucoesDaltonismoView, "instrucoesDaltonismo")
 
     def _add_frame(self, Frame, name: str) -> None:
         self.frames[name] = Frame(self.root)
