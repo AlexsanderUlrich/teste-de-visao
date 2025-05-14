@@ -38,7 +38,7 @@ class SelecaoDeTestesView(ctk.CTkFrame):
                 "icone": "assets/daltonismo_icone.png",
                 "titulo": "Olhe para o arco-íris.",
                 "descricao": "Consegue distinguir claramente as cores? O nosso teste da visão cromática vai determinar até que ponto.",
-                "view": "instrucoes_daltonismo"
+                "view": "instrucoesDaltonismo"
             },
             {
                 "icone": "assets/olhePonto_icone.png",
@@ -123,8 +123,7 @@ if __name__ == "__main__":
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
-    app = SelecaoDeTestesView(root, controller=DummyController())
-
+    app = SelecaoDeTestesView(root)
     app.grid(sticky="nsew")
 
     root.after(100, lambda: root.state("zoomed"))

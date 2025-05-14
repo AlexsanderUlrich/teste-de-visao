@@ -2,8 +2,9 @@ import customtkinter as ctk
 from PIL import Image
 
 class InstrucoesDaltonismoView(ctk.CTkFrame):
-    def __init__(self, master=None, **kwargs):
+    def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)
+        self.controller = controller  # instância de View
         self.configure(fg_color="white")
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -112,7 +113,7 @@ class InstrucoesDaltonismoView(ctk.CTkFrame):
             self.mostrar_card(self.indice_atual)
 
     def concluir(self):
-        print("Instruções concluídas!")
+        self.controller.switch("daltonismo")
 
 # Execução isolada
 if __name__ == "__main__":

@@ -5,6 +5,8 @@ from .home import HomeView
 from .selecao_de_testes import SelecaoDeTestesView
 from .disclaimer import DisclaimerView
 from .instrucoes_daltonismo import InstrucoesDaltonismoView
+from .daltonismo import DaltonismoView
+from .resultado import ResultadoView
 
 class Frames(TypedDict):
 
@@ -12,6 +14,9 @@ class Frames(TypedDict):
     selecaoDeTestes: SelecaoDeTestesView
     disclaimer: DisclaimerView
     instrucoesDaltonismo: InstrucoesDaltonismoView
+    daltonismo: DaltonismoView
+    resultado: ResultadoView
+    
 
 
 class View:
@@ -22,6 +27,8 @@ class View:
         self._add_frame(SelecaoDeTestesView, "selecaoDeTestes")
         self._add_frame(DisclaimerView, "disclaimer")
         self._add_frame(InstrucoesDaltonismoView, "instrucoesDaltonismo")
+        self._add_frame(DaltonismoView, "daltonismo")
+        self._add_frame(ResultadoView, "resultado")
 
     def _add_frame(self, Frame, name: str) -> None:
         self.frames[name] = Frame(self.root)

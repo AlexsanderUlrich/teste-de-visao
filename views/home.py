@@ -1,4 +1,4 @@
-from tkinter import Frame, Label, Button
+from tkinter import Frame
 import tkinter as tk
 
 
