@@ -1,19 +1,12 @@
-# TKINTER MVC MULTI-FRAME
+# TESTE DE VISÃO
 
-Tkinter is a common library for making Graphical User Interface (GUI) in Python. In this project, I designed a moderately complex Tkinter project with multiple frames following the MVC design pattern. I wrote an [article](https://nazmul-ahsan.medium.com/how-to-organize-multi-frame-tkinter-application-with-mvc-pattern-79247efbb02b) about it on Medium where I used this project as the example.
+## Descrição
+Esse programa tem por objetivo, testar a visão do usuário, através de uma série de perguntas e respostas, que serão apresentadas ao usuário. O programa irá perguntar ao usuário se ele consegue ver certas imagens e, com base nas respostas, irá determinar de maneira superficial como está a visão do usuário.
 
-To run the project,
+## Instalação
+``pip install -r requirements.txt``
 
-1. Clone the project
-2. Create a virtual enviroment and activate it.
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-3. Install the required packages
-
-```bash
-pip install -r requirements.txt
-```
+## Utilização
+- Para iniciar o programa basta executar o comando ``python app.py``
+- Caso quiser ver uma das views em específico, você pode executar o comando mesmo comando acima, más trocando o **app.py** pelo nome da view, 
+    - como por exemplo ``python daltonismo.py``
