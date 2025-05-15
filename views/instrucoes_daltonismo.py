@@ -113,6 +113,8 @@ class InstrucoesDaltonismoView(ctk.CTkFrame):
             self.mostrar_card(self.indice_atual)
 
     def concluir(self):
+        self.indice_atual = 0
+        self.mostrar_card(self.indice_atual)
         self.controller.switch("daltonismo")
 
 # Execução isolada

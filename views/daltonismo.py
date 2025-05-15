@@ -41,8 +41,8 @@ class DaltonismoView(ctk.CTkFrame):
 
     def carregar_proximo(self):
         if self.index >= len(self.testes):
-            self.container.destroy()
             self.definir_resultado()
+            self.reset()
             self.controller.switch("resultado")
             return
 
@@ -136,7 +136,14 @@ class DaltonismoView(ctk.CTkFrame):
             resultado["mensagem"] = "A sua visão cromática parece ser reduzida"
             resultado["olho_esquerdo"] = "vermelho"
             resultado["olho_direito"] = "vermelho"    
-        print(resultado)    
+        print(resultado)
+
+    def reset(self):
+        self.index = 0
+        self.acertos = 0
+        self.testes = random.sample(testes, 6)
+        self.carregar_proximo()
+    
 
 
 if __name__ == "__main__":
