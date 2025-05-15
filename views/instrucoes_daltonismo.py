@@ -1,6 +1,19 @@
 import customtkinter as ctk
 from PIL import Image
 
+texto_disclaimer = """ 
+Este Teste de Visão Online serve para obter uma primeira impressão sobre o atual
+desempenho da visão. Não é um exame médico e não dispensa a consulta de um
+especialista para a prestação de cuidados oftalmológicos adequados. Não se
+destina a ser utilizado no diagnóstico de doenças nem na sua mitigação,
+tratamento ou prevenção. Este teste destina-se apenas a dar-lhe uma ideia geral da
+sua acuidade visual e se é aconselhável realizar um exame oftalmológico por um
+especialista. Recomendamos fazer um exame oftalmológico por um especialista de
+dois em dois anos, ou mais cedo se constatar alterações na sua visão. A RSData
+recusa qualquer responsabilidade por danos ou consequências decorrentes do Teste
+de Visão Online e/ou das informações fornecidas.
+"""
+
 class InstrucoesDaltonismoView(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)
@@ -9,6 +22,7 @@ class InstrucoesDaltonismoView(ctk.CTkFrame):
         self.grid(row=0, column=0, sticky="nsew")
 
         self.cards_data = [
+            {"icone": "assets/exclamacao.png", "titulo": "Leia e aceite antes de começar.", "descricao": texto_disclaimer},
             {"icone": "assets/oculos_lente.png", "titulo": "Esteja preparado(a)", "descricao": "Coloque os seus óculos ou lentes de contacto (se usar)."},
             {"icone": "assets/dois_olhos (Grande).png", "titulo": "Está com os olhos prontos?", "descricao": "Mantenha os dois olhos abertos"},
             {"icone": "assets/distancia_tela.png", "titulo": "Mantenha distância", "descricao": "Se posicione em cima da marcação que está no chão."}
@@ -79,7 +93,7 @@ class InstrucoesDaltonismoView(ctk.CTkFrame):
             self.card_frame,
             text=dados["descricao"],
             font=ctk.CTkFont(size=30),
-            wraplength=700,
+            wraplength=1500,
             justify="center",
             text_color="gray"
         ).grid(row=4, column=0, pady=(0, 0), padx=40, sticky="n")
@@ -102,8 +116,12 @@ class InstrucoesDaltonismoView(ctk.CTkFrame):
             dot.pack(side="left", padx=2)
 
     def atualizar_botao(self):
-        if self.indice_atual == len(self.cards_data) - 1:
+        if self.indice_atual == 0:
+            self.botao_proximo.configure(text="Aceito", command=self.proximo_card)
+
+        elif self.indice_atual == len(self.cards_data) - 1:
             self.botao_proximo.configure(text="Estou pronto(a)", command=self.concluir)
+            
         else:
             self.botao_proximo.configure(text="Próximo", command=self.proximo_card)
 
