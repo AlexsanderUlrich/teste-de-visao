@@ -135,9 +135,8 @@ class DaltonismoView(ctk.CTkFrame):
             resultado["titulo"] = "Visao Cromática"
             resultado["mensagem"] = "A sua visão cromática parece ser reduzida"
             resultado["olho_esquerdo"] = "vermelho"
-            resultado["olho_direito"] = "vermelho"
-
-        resultado["acertos"] = str(self.acertos)
+            resultado["olho_direito"] = "vermelho"    
+        print(resultado)    
 
 
 if __name__ == "__main__":

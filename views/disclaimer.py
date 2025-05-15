@@ -3,7 +3,7 @@ import tkinter as tk
 
 
 class DisclaimerView(Frame):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, controller=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.grid(row=0, column=0, sticky="nsew")  # Garantir que ocupe toda a tela
         self.grid_rowconfigure(0, weight=1)
@@ -26,10 +26,9 @@ destina a ser utilizado no diagnóstico de doenças nem na sua mitigação,
 tratamento ou prevenção. Este teste destina-se apenas a dar-lhe uma ideia geral da
 sua acuidade visual e se é aconselhável realizar um exame oftalmológico por um
 especialista. Recomendamos fazer um exame oftalmológico por um especialista de
-dois em dois anos, ou mais cedo se constatar alterações na sua visão. A Carl Zeiss
-Vision Inc- e as empresas que fazem parte do grupo Carl Zeiss recusam qualquer
-responsabilidade por danos ou consequências decorrentes do Teste de Visão Online
-elou das informações fornecidas.
+dois em dois anos, ou mais cedo se constatar alterações na sua visão. A RSData
+recusa qualquer responsabilidade por danos ou consequências decorrentes do Teste
+de Visão Online e/ou das informações fornecidas.
 """
 
         # Título

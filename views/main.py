@@ -24,6 +24,7 @@ class View:
         self.root = Root()
         self.frames: Frames = {}
 
+        self._add_frame(HomeView, "home")
         self._add_frame(SelecaoDeTestesView, "selecaoDeTestes")
         self._add_frame(DisclaimerView, "disclaimer")
         self._add_frame(InstrucoesDaltonismoView, "instrucoesDaltonismo")
@@ -31,12 +32,16 @@ class View:
         self._add_frame(ResultadoView, "resultado")
 
     def _add_frame(self, Frame, name: str) -> None:
-        self.frames[name] = Frame(self.root)
+        self.frames[name] = Frame(self.root, controller=self)
         self.frames[name].grid(row=0, column=0, sticky="nsew")
 
     def switch(self, name: str) -> None:
         frame = self.frames[name]
         frame.tkraise()
+
+    def ir_para_selecao(self):
+        self.switch("selecaoDeTestes")
+
 
     def start_mainloop(self) -> None:
         self.root.mainloop()
