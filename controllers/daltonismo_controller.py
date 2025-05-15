@@ -1,10 +1,8 @@
-from models.main import Model
 from views.main import View
 from views.daltonismo import DaltonismoView
 
 class DaltonismoController:
-    def __init__(self, model: Model, view: View) -> None:
-        self.model = model
+    def __init__(self, view: View) -> None:
         self.view = view
 
         # Cria e registra a view passando o controller

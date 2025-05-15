@@ -1,10 +1,8 @@
-from models.main import Model
 from views.main import View
 from views.selecao_de_testes import SelecaoDeTestesView  # ajuste conforme seu nome real
 
 class SelecaoDeTestesController:
-    def __init__(self, model: Model, view: View) -> None:
-        self.model = model
+    def __init__(self, view: View) -> None:
         self.view = view
 
         # Cria e registra a view passando o controller
