@@ -14,4 +14,5 @@ class DaltonismoController:
         self.frame = frame
 
     def switch(self, nome: str):
+        self.view.frames[nome].atualizar()
         self.view.switch(nome)

@@ -6,8 +6,8 @@ from .daltonismo import resultado as daltonismo_resultado
 # Cada item: (imagem_path)
 imagens_resultado = [
     {"azul": "assets/resultados/resultado_azul.png"},
-    {"amarelo": "assets/resultados/resultado_vermelho.png"},
-    {"vermelho": "assets/resultados/resultado_amarelo.png"}
+    {"amarelo": "assets/resultados/resultado_amarelo.png"},
+    {"vermelho": "assets/resultados/resultado_vermelho.png"}
 ]
 
 texto_procurar_profissiona = """
@@ -15,10 +15,10 @@ Consulte sempre um profissional da visão para um exame oftalmológico completo.
 """
 
 resultado = {
-    "titulo": "Visão cromática", 
-    "mensagem": "A sua visão cromática parece ser Excelente.",
+    "titulo": "Teste", 
+    "mensagem": "Teste",
     "olho_esquerdo": "azul",
-    "olho_direito": "azul"
+    "olho_direito": "vermelho"
 }
 
 class ResultadoView(ctk.CTkFrame):
@@ -34,7 +34,14 @@ class ResultadoView(ctk.CTkFrame):
 
         self.container = ctk.CTkFrame(self, fg_color="white")
         self.container.grid(row=0, column=0, sticky="nsew")
-        self.container.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7), weight=1)
+        self.container.grid_rowconfigure(0, weight=0)
+        self.container.grid_rowconfigure(1, weight=1)
+        self.container.grid_rowconfigure(2, weight=0)
+        self.container.grid_rowconfigure(3, weight=0)
+        self.container.grid_rowconfigure(4, weight=0)
+        self.container.grid_rowconfigure(5, weight=1)
+        self.container.grid_rowconfigure(6, weight=0)
+        self.container.grid_rowconfigure(7, weight=0)
         self.container.grid_columnconfigure(0, weight=1)
 
         self.carregar_resultado()
@@ -50,7 +57,7 @@ class ResultadoView(ctk.CTkFrame):
         ctk.CTkLabel(
             self.container,
             text=resultado["titulo"],
-            font=ctk.CTkFont(size=80, family='arial', weight="bold"),
+            font=ctk.CTkFont(size=28, family='arial', weight="bold"),
             text_color="#222233",
             justify="center",
         ).grid(row=0, column=0, sticky="n")
@@ -95,7 +102,7 @@ class ResultadoView(ctk.CTkFrame):
         ctk.CTkLabel(
             self.container,
             text=resultado["mensagem"],
-            font=ctk.CTkFont(size=28, family="arial", weight="bold"),
+            font=ctk.CTkFont(size=50, family="arial", weight="bold"),
             text_color="#36719f",
             justify="center",
             wraplength=600
@@ -105,20 +112,26 @@ class ResultadoView(ctk.CTkFrame):
         ctk.CTkLabel(
             self.container,
             text=texto_procurar_profissiona,
-            font=ctk.CTkFont(size=28, family='helvetica'),
-            text_color="#222233",
+            font=ctk.CTkFont(size=18, family='helvetica'),
+            text_color="gray",
             justify="center",
-            wraplength=800
+            wraplength=600
         ).grid(row=6, column=0, sticky="s")
 
         # Botão para voltar
         ctk.CTkButton(
             self.container,
             text="Voltar ao menu inicial",
-            width=800,
+            width=600,
             height=40,
             command=self.retornar_a_home  # Sem parênteses!
         ).grid(row=7, sticky="s", pady=(10, 30))
+    
+    def atualizar(self):
+        # Remove widgets antigos (opcional, se for recriar tudo)
+        for widget in self.container.winfo_children():
+            widget.destroy()
+        self.carregar_resultado()
 
     def retornar_a_home(self):
         if self.controller:
