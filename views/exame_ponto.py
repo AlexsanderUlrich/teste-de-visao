@@ -1,11 +1,10 @@
 import customtkinter as ctk
-import random
 
 from PIL import Image, ImageTk
 
-# Cada item: (imagem_path, número_correto, [opções])
+# Cada item: (imagem_path, texto 1, texto 2, texto 3, número_correto, [opções])
 testes = [
-    ("assets/exame_ponto/grade_olho.png", 
+    ("assets/exame_ponto/grade_olho.png",
      "1 - Tape o Olho Esquerdo.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
      "3 - Foque no ponto negro no centro. Todas as linhas e quadrados parecem iguais e regulares?", 
@@ -22,7 +21,7 @@ testes = [
 ]
 
 # Adicionar aqui, o que vai ser exibido na tela de resultado.
-resultado =  {}
+resultado = 0
 
 class ExamePontoView(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
@@ -41,21 +40,21 @@ class ExamePontoView(ctk.CTkFrame):
         self.container.grid_columnconfigure(0, weight=1)
 
         self.index = 0
-        self.acertos = 0
+        self.testes = testes
         self.carregar_proximo()
 
     def carregar_proximo(self):
         if self.index >= len(self.testes):
-            self.definir_resultado()
-            self.reset()
-            self.controller.switch("resultado")
+            print("Resultado o exame ponto no olho esquerdo: ", resultado)
+            self.index = 0
+            self.controller.switch("instrucoesExamePonto2")
             return
 
         for widget in self.container.winfo_children():
             widget.destroy()
 
         imagem_path, um, dois, tres, resposta_certa, opcoes = self.testes[self.index]
-        img = Image.open(imagem_path).resize((400, 400))
+        img = Image.open(imagem_path).resize((250, 250))
         photo = ImageTk.PhotoImage(img)
 
         # Orientações acima da imagem
@@ -64,8 +63,7 @@ class ExamePontoView(ctk.CTkFrame):
             text=um,
             font=ctk.CTkFont(size=28, family='helvetica'),
             text_color="gray",
-            justify="center",
-            wraplength=600
+            justify="center"
         ).grid(row=1, column=0, pady=(30, 10), sticky="n")
 
         ctk.CTkLabel(
@@ -73,8 +71,7 @@ class ExamePontoView(ctk.CTkFrame):
             text=dois,
             font=ctk.CTkFont(size=28, family='helvetica'),
             text_color="gray",
-            justify="center",
-            wraplength=600
+            justify="center"
         ).grid(row=2, column=0, pady=(0, 10), sticky="n")
 
         ctk.CTkLabel(
@@ -82,8 +79,7 @@ class ExamePontoView(ctk.CTkFrame):
             text=tres,
             font=ctk.CTkFont(size=28, family='helvetica', weight="bold"),
             text_color="gray",
-            justify="center",
-            wraplength=600
+            justify="center"
         ).grid(row=3, column=0, pady=(0, 0), sticky="n")
 
         # Imagem 
@@ -108,53 +104,25 @@ class ExamePontoView(ctk.CTkFrame):
             self.botoes.append(btn)
 
     def verificar_resposta(self, escolha, correta):
+        global resultado
         if escolha == correta:
-            self.acertos += 1
-
-        for btn in self.botoes:
-            if btn.cget("text") == correta:
-                btn.configure(fg_color="green", text=f"{correta} ✓")
-            elif btn.cget("text") == escolha:
-                btn.configure(fg_color="red", text=f"{escolha} ✗")
-            btn.configure(state="disabled")
+            resultado += 1        
 
         self.after(1000, self.avancar)
 
     def avancar(self):
         self.index += 1
-        self.carregar_proximo()
-
-    def definir_resultado(self):
-        global resultado
-        if self.acertos == 6:
-            resultado["titulo"] = "Visão cromática"
-            resultado["mensagem"] = "A sua visão cromática parece ser Excelente."
-            resultado["olho_esquerdo"] = "azul"
-            resultado["olho_direito"] = "azul"
-        elif self.acertos == 5:
-            resultado["titulo"] = "Visão Cromática"
-            resultado["mensagem"] = "A sua visão cromática parece ser boa"
-            resultado["olho_esquerdo"] = "amarelo"
-            resultado["olho_direito"] = "amarelo"
-        else:
-            resultado["titulo"] = "Visao Cromática"
-            resultado["mensagem"] = "A sua visão cromática parece ser reduzida"
-            resultado["olho_esquerdo"] = "vermelho"
-            resultado["olho_direito"] = "vermelho"    
-        print(resultado)
+        self.carregar_proximo()    
 
     def reset(self):
-        self.index = 0
-        self.acertos = 0
-        self.testes = random.sample(testes, 6)
+        global resultado
+        resultado = 0
         self.carregar_proximo()
     
-
-
 if __name__ == "__main__":
     ctk.set_appearance_mode("light")
     root = ctk.CTk()
-    root.title("Teste de Visão - Daltonismo")
+    root.title("Teste de Visão - Campo de Visão")
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 

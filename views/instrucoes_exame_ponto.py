@@ -133,7 +133,7 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
     def concluir(self):
         self.indice_atual = 0
         self.mostrar_card(self.indice_atual)
-        self.controller.switch("daltonismo")
+        self.controller.switch("examePonto")
 
 # Execução isolada
 if __name__ == "__main__":

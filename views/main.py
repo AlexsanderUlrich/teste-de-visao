@@ -3,8 +3,16 @@ from typing import TypedDict
 from .root import Root
 from .home import HomeView
 from .selecao_de_testes import SelecaoDeTestesView
+
 from .instrucoes_daltonismo import InstrucoesDaltonismoView
 from .daltonismo import DaltonismoView
+
+from .instrucoes_exame_ponto import InstrucoesExamePontoView
+from .exame_ponto import ExamePontoView
+
+from .instrucoes_exame_ponto2 import InstrucoesExamePontoView2
+from .exame_ponto2 import ExamePontoView2
+
 from .resultado import ResultadoView
 
 class Frames(TypedDict):
@@ -13,6 +21,10 @@ class Frames(TypedDict):
     selecaoDeTestes: SelecaoDeTestesView
     instrucoesDaltonismo: InstrucoesDaltonismoView
     daltonismo: DaltonismoView
+    instrucoesExamePonto: InstrucoesExamePontoView
+    examePonto: ExamePontoView
+    instrucoesExamePonto2: InstrucoesExamePontoView2
+    examePonto2: ExamePontoView2
     resultado: ResultadoView
     
 
@@ -26,6 +38,10 @@ class View:
         self._add_frame(SelecaoDeTestesView, "selecaoDeTestes")
         self._add_frame(InstrucoesDaltonismoView, "instrucoesDaltonismo")
         self._add_frame(DaltonismoView, "daltonismo")
+        self._add_frame(InstrucoesExamePontoView,"instrucoesExamePonto")
+        self._add_frame(ExamePontoView,"examePonto")
+        self._add_frame(InstrucoesExamePontoView2,"instrucoesExamePonto2")
+        self._add_frame(ExamePontoView2,"examePonto2")
         self._add_frame(ResultadoView, "resultado")
 
     def _add_frame(self, Frame, name: str) -> None:

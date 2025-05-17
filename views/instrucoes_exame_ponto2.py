@@ -2,10 +2,10 @@ import customtkinter as ctk
 from PIL import Image
 
 
-class InstrucoesExamePontoView(ctk.CTkFrame):
+class InstrucoesExamePontoView2(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)
-        self.controller = controller  # instância de View
+        self.controller = controller
         self.configure(fg_color="white")
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -25,11 +25,11 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
         self.indicadores_frame = ctk.CTkFrame(self, fg_color="white")
         self.indicadores_frame.grid(row=1, column=0, pady=(0, 5))
 
-        # Botão de próxima etapa
+        # Botão de iniciar o exame
         self.botao_proximo = ctk.CTkButton(
             self,
-            text="Próximo",
-            command=self.proximo_card,
+            text="Estou pronto(a)",
+            command=self.concluir,
             font=ctk.CTkFont(size=22, weight="bold"),
             fg_color="#0078ff",
             hover_color="#005ccc",
@@ -48,7 +48,6 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
         self.card_frame.grid(row=0, column=0, sticky="nsew")
         self.card_frame.grid_columnconfigure(0, weight=1)
 
-        # Dividimos a área em linhas para centralização
         for i in range(7):
             self.card_frame.grid_rowconfigure(i, weight=1)
 
@@ -84,7 +83,6 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
         ).grid(row=4, column=0, pady=(0, 0), padx=40, sticky="n")
 
         self.atualizar_indicadores()
-        self.atualizar_botao()
 
     def atualizar_indicadores(self):
         for widget in self.indicadores_frame.winfo_children():
@@ -100,25 +98,11 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
             )
             dot.pack(side="left", padx=2)
 
-    def atualizar_botao(self):
-        if self.indice_atual == 0:
-            self.botao_proximo.configure(text="Aceito", command=self.proximo_card)
-
-        elif self.indice_atual == len(self.cards_data) - 1:
-            self.botao_proximo.configure(text="Estou pronto(a)", command=self.concluir)
-            
-        else:
-            self.botao_proximo.configure(text="Próximo", command=self.proximo_card)
-
-    def proximo_card(self):
-        if self.indice_atual < len(self.cards_data) - 1:
-            self.indice_atual += 1
-            self.mostrar_card(self.indice_atual)
-
     def concluir(self):
         self.indice_atual = 0
         self.mostrar_card(self.indice_atual)
-        self.controller.switch("daltonismo")
+        self.controller.switch("examePonto2")
+
 
 # Execução isolada
 if __name__ == "__main__":
@@ -128,9 +112,8 @@ if __name__ == "__main__":
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
-    app = InstrucoesExamePontoView(root)
+    app = InstrucoesExamePontoView2(root)
     app.grid(sticky="nsew")
 
     root.after(100, lambda: root.state("zoomed"))
     root.mainloop()
-

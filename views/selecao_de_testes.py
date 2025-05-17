@@ -44,7 +44,7 @@ class SelecaoDeTestesView(ctk.CTkFrame):
                 "icone": "assets/olhePonto_icone.png",
                 "titulo": "Olhe para o ponto",
                 "descricao": "O teste do campo visual consegue detetar problemas com o seu campo visual.",
-                "view": "campo_visual"
+                "view": "instrucoesExamePonto"
             }
         ])
 

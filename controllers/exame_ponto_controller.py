@@ -1,7 +1,7 @@
 from views.main import View
 from views.exame_ponto import ExamePontoView
 
-class ExamesPontoController:
+class ExamePontoController:
     def __init__(self, view: View) -> None:
         self.view = view
 
@@ -12,5 +12,4 @@ class ExamesPontoController:
         self.frame = frame
 
     def switch(self, nome: str):
-        self.view.frames[nome].atualizar()
         self.view.switch(nome)

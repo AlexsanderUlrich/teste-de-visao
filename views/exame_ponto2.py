@@ -1,9 +1,9 @@
 import customtkinter as ctk
-import random
-
 from PIL import Image, ImageTk
 
-# Cada item: (imagem_path, número_correto, [opções])
+from . import exame_ponto
+
+# Cada item: (imagem_path, texto 1, texto 2, texto 3, número_correto, [opções])
 testes = [
     ("assets/exame_ponto/grade_olho.png", 
      "1 - Tape o Olho Direito.",
@@ -16,16 +16,16 @@ testes = [
      "1 - Tape o Olho Direito.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
      "3 - Foque no ponto negro no centro. Alguma parte da grelha está em falta, distorcida ou mais escura do que as restantes?", 
-     "Não", 
+     "Não",
      ["Sim", "Não"]
      )
 ]
 
 # Adicionar aqui, o que vai ser exibido na tela de resultado.
-resultado_esquerdo =  {}
-resultado =  {}
+resultado_esquerdo =  0
+resultado = {}
 
-class ExamePontoView(ctk.CTkFrame):
+class ExamePontoView2(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)        
         self.controller = controller
@@ -34,7 +34,7 @@ class ExamePontoView(ctk.CTkFrame):
 
         # Configura linhas e colunas para centralizar tudo
         self.grid_rowconfigure(0, weight=1)  # Espaço acima
-        self.grid_rowconfigure(1, weight=1)  # container        
+        self.grid_rowconfigure(1, weight=1)  # container
         self.grid_columnconfigure(0, weight=1)
 
         self.container = ctk.CTkFrame(self, fg_color="white")
@@ -43,11 +43,13 @@ class ExamePontoView(ctk.CTkFrame):
 
         self.index = 0
         self.acertos = 0
+        self.testes = testes
         self.carregar_proximo()
 
     def carregar_proximo(self):
         if self.index >= len(self.testes):
             self.definir_resultado()
+            self.index = 0
             self.reset()
             self.controller.switch("resultado")
             return
@@ -56,7 +58,7 @@ class ExamePontoView(ctk.CTkFrame):
             widget.destroy()
 
         imagem_path, um, dois, tres, resposta_certa, opcoes = self.testes[self.index]
-        img = Image.open(imagem_path).resize((400, 400))
+        img = Image.open(imagem_path).resize((250, 250))
         photo = ImageTk.PhotoImage(img)
 
         # Orientações acima da imagem
@@ -65,8 +67,7 @@ class ExamePontoView(ctk.CTkFrame):
             text=um,
             font=ctk.CTkFont(size=28, family='helvetica'),
             text_color="gray",
-            justify="center",
-            wraplength=600
+            justify="center"
         ).grid(row=1, column=0, pady=(30, 10), sticky="n")
 
         ctk.CTkLabel(
@@ -74,8 +75,7 @@ class ExamePontoView(ctk.CTkFrame):
             text=dois,
             font=ctk.CTkFont(size=28, family='helvetica'),
             text_color="gray",
-            justify="center",
-            wraplength=600
+            justify="center"
         ).grid(row=2, column=0, pady=(0, 10), sticky="n")
 
         ctk.CTkLabel(
@@ -83,8 +83,7 @@ class ExamePontoView(ctk.CTkFrame):
             text=tres,
             font=ctk.CTkFont(size=28, family='helvetica', weight="bold"),
             text_color="gray",
-            justify="center",
-            wraplength=600
+            justify="center"
         ).grid(row=3, column=0, pady=(0, 0), sticky="n")
 
         # Imagem 
@@ -110,56 +109,71 @@ class ExamePontoView(ctk.CTkFrame):
 
     def verificar_resposta(self, escolha, correta):
         if escolha == correta:
-            self.acertos += 1
+            self.acertos += 1        
 
         for btn in self.botoes:
-            if btn.cget("text") == correta:
-                btn.configure(fg_color="green", text=f"{correta} ✓")
-            elif btn.cget("text") == escolha:
-                btn.configure(fg_color="red", text=f"{escolha} ✗")
             btn.configure(state="disabled")
 
         self.after(1000, self.avancar)
 
     def avancar(self):
         self.index += 1
-        self.carregar_proximo()
-
+        self.carregar_proximo()    
+    
     def definir_resultado(self):
+        global resultado_esquerdo
         global resultado
-        if self.acertos == 6:
-            resultado["titulo"] = "Visão cromática"
-            resultado["mensagem"] = "A sua visão cromática parece ser Excelente."
+
+        resultado_esquerdo = exame_ponto.resultado        
+        resultado["titulo"] = "Campo de Visão"
+
+        print("Exame do Ponto, quantidade de acertos OE: ", resultado_esquerdo)
+        print("Exame do Ponto, quantidade de acertos OD: ", self.acertos)
+        if self.acertos > 1: 
             resultado["olho_esquerdo"] = "azul"
             resultado["olho_direito"] = "azul"
-        elif self.acertos == 5:
-            resultado["titulo"] = "Visão Cromática"
-            resultado["mensagem"] = "A sua visão cromática parece ser boa"
+        elif self.acertos == 1 and resultado_esquerdo == 1:
             resultado["olho_esquerdo"] = "amarelo"
             resultado["olho_direito"] = "amarelo"
+        elif self.acertos == 1 and resultado_esquerdo > 1:
+            resultado["olho_esquerdo"] = "azul"
+            resultado["olho_direito"] = "amarelo"
+        elif self.acertos > 1 and resultado_esquerdo == 1:
+            resultado["olho_esquerdo"] = "amarelo"
+            resultado["olho_direito"] = "azul"
         else:
-            resultado["titulo"] = "Visao Cromática"
-            resultado["mensagem"] = "A sua visão cromática parece ser reduzida"
             resultado["olho_esquerdo"] = "vermelho"
-            resultado["olho_direito"] = "vermelho"    
-        print(resultado)
+            resultado["olho_direito"] = "vermelho"
+
+        if resultado["olho_direito"] or resultado["olho_esquerdo"] == "vermelho":
+            resultado["mensagem"] = "O seu campo de visão parece ser reduzido."
+        elif resultado["olho_direito"] and resultado["olho_esquerdo"] == "azul":
+            resultado["mensagem"] = "O seu campo de visão parece ser excelente."        
+        else:
+            resultado["mensagem"] = "O seu campo de visão parece ser bom"
+ 
+        print("Resultado final do exame do ponto: ", resultado)
 
     def reset(self):
-        self.index = 0
         self.acertos = 0
-        self.testes = random.sample(testes, 6)
+        exame_ponto.ExamePontoView.reset(self)
         self.carregar_proximo()
+
+    def apagar_resultado(self):
+        global resultado
+        global resultado_esquerdo
+
+        resultado = {}
+        resultado_esquerdo = 0
     
-
-
 if __name__ == "__main__":
     ctk.set_appearance_mode("light")
     root = ctk.CTk()
-    root.title("Teste de Visão - Daltonismo")
+    root.title("Teste de Visão - Campo de Visão")
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
-    app = ExamePontoView(root)
+    app = ExamePontoView2(root)
     app.grid(sticky="nsew")
 
     root.after(100, lambda: root.state("zoomed"))

@@ -121,18 +121,16 @@ class DaltonismoView(ctk.CTkFrame):
 
     def definir_resultado(self):
         global resultado
+        resultado["titulo"] = "Visão cromática"
         if self.acertos == 6:
-            resultado["titulo"] = "Visão cromática"
-            resultado["mensagem"] = "A sua visão cromática parece ser Excelente."
+            resultado["mensagem"] = "A sua visão cromática parece ser excelente."
             resultado["olho_esquerdo"] = "azul"
             resultado["olho_direito"] = "azul"
         elif self.acertos == 5:
-            resultado["titulo"] = "Visão Cromática"
             resultado["mensagem"] = "A sua visão cromática parece ser boa"
             resultado["olho_esquerdo"] = "amarelo"
             resultado["olho_direito"] = "amarelo"
         else:
-            resultado["titulo"] = "Visao Cromática"
             resultado["mensagem"] = "A sua visão cromática parece ser reduzida"
             resultado["olho_esquerdo"] = "vermelho"
             resultado["olho_direito"] = "vermelho"    
@@ -144,6 +142,9 @@ class DaltonismoView(ctk.CTkFrame):
         self.testes = random.sample(testes, 6)
         self.carregar_proximo()
     
+    def apagar_resultado(self):       
+        global resultado
+        resultado = {}
 
 
 if __name__ == "__main__":

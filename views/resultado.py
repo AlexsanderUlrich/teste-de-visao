@@ -1,7 +1,9 @@
 import customtkinter as ctk
 from PIL import Image
 from customtkinter import CTkImage
-from .daltonismo import resultado as daltonismo_resultado
+from . import daltonismo
+from . import exame_ponto2
+
 
 # Cada item: (imagem_path)
 imagens_resultado = [
@@ -15,7 +17,7 @@ Consulte sempre um profissional da visão para um exame oftalmológico completo.
 """
 
 resultado = {
-    "titulo": "Teste", 
+    "titulo": "Teste",
     "mensagem": "Teste",
     "olho_esquerdo": "azul",
     "olho_direito": "vermelho"
@@ -48,10 +50,14 @@ class ResultadoView(ctk.CTkFrame):
 
     def carregar_resultado(self):
         global resultado
-        print(daltonismo_resultado)
+        print("Resultado do teste de daltonismo: ", daltonismo.resultado)
+        print("Resultado do teste do campo de visão: ", exame_ponto2.resultado)
         print(resultado)
-        if daltonismo_resultado != {}:
-            resultado = daltonismo_resultado
+
+        if daltonismo.resultado != {}:
+            resultado = daltonismo.resultado
+        if exame_ponto2.resultado != {}:
+            resultado = exame_ponto2.resultado
 
         # Título
         ctk.CTkLabel(
@@ -134,6 +140,14 @@ class ResultadoView(ctk.CTkFrame):
         self.carregar_resultado()
 
     def retornar_a_home(self):
+        daltonismo.DaltonismoView.apagar_resultado(self)
+        print("Daltonismo depois de apagar:", daltonismo.resultado)
+        exame_ponto2.ExamePontoView2.apagar_resultado(self)
+        print("Exame_Ponto depois de apagar:", exame_ponto2.resultado)
+
+        global resultado
+        resultado = {}
+
         if self.controller:
             self.controller.switch("home")
 
