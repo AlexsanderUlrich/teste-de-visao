@@ -4,14 +4,14 @@ from PIL import Image, ImageTk
 
 # Cada item: (imagem_path, texto 1, texto 2, texto 3, número_correto, [opções])
 testes = [
-    ("assets/exame_ponto/grade_olho.png",
+    ("assets/exame_ponto/grade.png",
      "1 - Tape o Olho Esquerdo.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
      "3 - Foque no ponto negro no centro. Todas as linhas e quadrados parecem iguais e regulares?", 
      "Sim", 
      ["Sim", "Não"]
      ),
-    ("assets/exame_ponto/grade_olho.png", 
+    ("assets/exame_ponto/grade.png", 
      "1 - Tape o Olho Esquerdo.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
      "3 - Foque no ponto negro no centro. Alguma parte da grelha está em falta, distorcida ou mais escura do que as restantes?", 
@@ -62,6 +62,7 @@ class ExamePontoView(ctk.CTkFrame):
             self.container,
             text=um,
             font=ctk.CTkFont(size=28, family='helvetica'),
+            wraplength=1500,
             text_color="gray",
             justify="center"
         ).grid(row=1, column=0, pady=(30, 10), sticky="n")
@@ -70,6 +71,7 @@ class ExamePontoView(ctk.CTkFrame):
             self.container,
             text=dois,
             font=ctk.CTkFont(size=28, family='helvetica'),
+            wraplength=1500,
             text_color="gray",
             justify="center"
         ).grid(row=2, column=0, pady=(0, 10), sticky="n")
@@ -78,6 +80,7 @@ class ExamePontoView(ctk.CTkFrame):
             self.container,
             text=tres,
             font=ctk.CTkFont(size=28, family='helvetica', weight="bold"),
+            wraplength=1500,
             text_color="gray",
             justify="center"
         ).grid(row=3, column=0, pady=(0, 0), sticky="n")

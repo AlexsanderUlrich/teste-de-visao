@@ -17,10 +17,10 @@ Consulte sempre um profissional da visão para um exame oftalmológico completo.
 """
 
 resultado = {
-    "titulo": "Teste",
-    "mensagem": "Teste",
-    "olho_esquerdo": "azul",
-    "olho_direito": "vermelho"
+    "titulo": "",
+    "mensagem": "",
+    "olho_esquerdo": "",
+    "olho_direito": ""
 }
 
 class ResultadoView(ctk.CTkFrame):

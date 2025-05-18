@@ -5,14 +5,14 @@ from . import exame_ponto
 
 # Cada item: (imagem_path, texto 1, texto 2, texto 3, número_correto, [opções])
 testes = [
-    ("assets/exame_ponto/grade_olho.png", 
+    ("assets/exame_ponto/grade.png", 
      "1 - Tape o Olho Direito.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
      "3 - Foque no ponto negro no centro. Todas as linhas e quadrados parecem iguais e regulares?", 
      "Sim", 
      ["Sim", "Não"]
      ),
-    ("assets/exame_ponto/grade_olho.png", 
+    ("assets/exame_ponto/grade.png", 
      "1 - Tape o Olho Direito.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
      "3 - Foque no ponto negro no centro. Alguma parte da grelha está em falta, distorcida ou mais escura do que as restantes?", 
@@ -22,7 +22,7 @@ testes = [
 ]
 
 # Adicionar aqui, o que vai ser exibido na tela de resultado.
-resultado_esquerdo =  0
+resultado_direito =  0
 resultado = {}
 
 class ExamePontoView2(ctk.CTkFrame):
@@ -66,6 +66,7 @@ class ExamePontoView2(ctk.CTkFrame):
             self.container,
             text=um,
             font=ctk.CTkFont(size=28, family='helvetica'),
+            wraplength=1500,
             text_color="gray",
             justify="center"
         ).grid(row=1, column=0, pady=(30, 10), sticky="n")
@@ -74,6 +75,7 @@ class ExamePontoView2(ctk.CTkFrame):
             self.container,
             text=dois,
             font=ctk.CTkFont(size=28, family='helvetica'),
+            wraplength=1500,
             text_color="gray",
             justify="center"
         ).grid(row=2, column=0, pady=(0, 10), sticky="n")
@@ -82,6 +84,7 @@ class ExamePontoView2(ctk.CTkFrame):
             self.container,
             text=tres,
             font=ctk.CTkFont(size=28, family='helvetica', weight="bold"),
+            wraplength=1500,
             text_color="gray",
             justify="center"
         ).grid(row=3, column=0, pady=(0, 0), sticky="n")
@@ -120,38 +123,53 @@ class ExamePontoView2(ctk.CTkFrame):
         self.index += 1
         self.carregar_proximo()    
     
-    def definir_resultado(self):
-        global resultado_esquerdo
+    def definir_mensagem_final(self):
         global resultado
+        if resultado["olho_esquerdo"] == "vermelho" or resultado["olho_direito"] == "vermelho":
+            resultado["mensagem"] = "O seu campo de visão parece ser reduzido."
+        elif resultado["olho_esquerdo"] =="azul" and resultado["olho_direito"] == "azul":
+            resultado["mensagem"] = "O seu campo de visão parece ser excelente."
+        else:
+            resultado["mensagem"] = "O seu campo de visão parece ser bom"    
 
-        resultado_esquerdo = exame_ponto.resultado        
+    def definir_cor_olhos(self):
+        global resultado
+        global resultado_direito
+
+        resultado_direito = exame_ponto.resultado
+
+        if self.acertos > 1 and resultado_direito >1: 
+            resultado["olho_direito"] = "azul"
+            resultado["olho_esquerdo"] = "azul"
+        elif self.acertos == 1 and resultado_direito > 1:
+            resultado["olho_direito"] = "azul"
+            resultado["olho_esquerdo"] = "amarelo"
+        elif self.acertos == 0 and resultado_direito > 1:
+            resultado["olho_direito"] = "azul"
+            resultado["olho_esquerdo"] = "vermelho"
+        elif self.acertos == 1 and resultado_direito == 1:
+            resultado["olho_direito"] = "amarelo"
+            resultado["olho_esquerdo"] = "amarelo"
+        elif self.acertos > 1 and resultado_direito == 1:
+            resultado["olho_direito"] = "amarelo"
+            resultado["olho_esquerdo"] = "azul"
+        elif self.acertos > 1 and resultado_direito == 0:
+            resultado["olho_direito"] = "vermelho"
+            resultado["olho_esquerdo"] = "azul"
+        else:
+            resultado["olho_direito"] = "vermelho"
+            resultado["olho_esquerdo"] = "vermelho"      
+
+    def definir_resultado(self):
+        global resultado
         resultado["titulo"] = "Campo de Visão"
 
-        print("Exame do Ponto, quantidade de acertos OE: ", resultado_esquerdo)
-        print("Exame do Ponto, quantidade de acertos OD: ", self.acertos)
-        if self.acertos > 1: 
-            resultado["olho_esquerdo"] = "azul"
-            resultado["olho_direito"] = "azul"
-        elif self.acertos == 1 and resultado_esquerdo == 1:
-            resultado["olho_esquerdo"] = "amarelo"
-            resultado["olho_direito"] = "amarelo"
-        elif self.acertos == 1 and resultado_esquerdo > 1:
-            resultado["olho_esquerdo"] = "azul"
-            resultado["olho_direito"] = "amarelo"
-        elif self.acertos > 1 and resultado_esquerdo == 1:
-            resultado["olho_esquerdo"] = "amarelo"
-            resultado["olho_direito"] = "azul"
-        else:
-            resultado["olho_esquerdo"] = "vermelho"
-            resultado["olho_direito"] = "vermelho"
+        print("Exame do Ponto, quantidade de acertos OD: ", resultado_direito)
+        print("Exame do Ponto, quantidade de acertos OE: ", self.acertos)       
+              
+        self.definir_cor_olhos()
+        self.definir_mensagem_final()
 
-        if resultado["olho_direito"] or resultado["olho_esquerdo"] == "vermelho":
-            resultado["mensagem"] = "O seu campo de visão parece ser reduzido."
-        elif resultado["olho_direito"] and resultado["olho_esquerdo"] == "azul":
-            resultado["mensagem"] = "O seu campo de visão parece ser excelente."        
-        else:
-            resultado["mensagem"] = "O seu campo de visão parece ser bom"
- 
         print("Resultado final do exame do ponto: ", resultado)
 
     def reset(self):
@@ -161,10 +179,10 @@ class ExamePontoView2(ctk.CTkFrame):
 
     def apagar_resultado(self):
         global resultado
-        global resultado_esquerdo
+        global resultado_direito
 
         resultado = {}
-        resultado_esquerdo = 0
+        resultado_direito = 0
     
 if __name__ == "__main__":
     ctk.set_appearance_mode("light")
