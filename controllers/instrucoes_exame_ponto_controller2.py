@@ -1,5 +1,5 @@
 from views.main import View
-from views.instrucoes_exame_ponto2 import InstrucoesExamePontoView2  # ajuste conforme seu nome real
+from views.instrucoes_exame_ponto2 import InstrucoesExamePontoView2
 
 class InstrucoesExamePontoController2:
     def __init__(self, view: View) -> None:

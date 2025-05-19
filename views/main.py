@@ -13,6 +13,14 @@ from .exame_ponto import ExamePontoView
 from .instrucoes_exame_ponto2 import InstrucoesExamePontoView2
 from .exame_ponto2 import ExamePontoView2
 
+from .instrucoes_astigmatismo import InstrucoesAstigmatismoView
+from .astigmatismo import AstigmatismoView
+
+from .instrucoes_astigmatismo2 import InstrucoesAstigmatismoView2
+from .astigmatismo2 import AstigmatismoView2
+
+from .acuidade import AcuidadeView
+
 from .resultado import ResultadoView
 
 class Frames(TypedDict):
@@ -42,6 +50,14 @@ class View:
         self._add_frame(ExamePontoView,"examePonto")
         self._add_frame(InstrucoesExamePontoView2,"instrucoesExamePonto2")
         self._add_frame(ExamePontoView2,"examePonto2")
+        self._add_frame(InstrucoesAstigmatismoView,"instrucoesAstigmatismo")
+        self._add_frame(AstigmatismoView,"astigmatismo")
+        self._add_frame(InstrucoesAstigmatismoView2,"instrucoesAstigmatismo2")
+        self._add_frame(AstigmatismoView2,"astigmatismo2")
+
+
+        self._add_frame(AcuidadeView,"acuidade")
+
         self._add_frame(ResultadoView, "resultado")
 
     def _add_frame(self, Frame, name: str) -> None:

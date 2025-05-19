@@ -12,6 +12,14 @@ from .exame_ponto_controller import ExamePontoController
 from .instrucoes_exame_ponto_controller2 import InstrucoesExamePontoController2
 from .exame_ponto_controller2 import ExamePontoController2
 
+from .instrucoes_astigmatismo_controller import InstrucoesAstigmatismoController
+from .astigmatismo_controller import AstigmatismoController
+
+from .instrucoes_astigmatismo_controller2 import InstrucoesAstigmatismoController2
+from .astigmatismo_controller2 import AstigmatismoController2 
+
+from .acuidade_controller import AcuidadeController
+
 from .resultado_controller import ResultadoController
 
 
@@ -29,6 +37,14 @@ class Controller:
 
         self.instrucoes_exame_ponto_controller2 = InstrucoesExamePontoController2(view)
         self.exame_ponto_controller2 = ExamePontoController2(view)
+
+        self.instrucoes_astigmatismo_contoller = InstrucoesAstigmatismoController(view)
+        self.astigmatismo_contoller = AstigmatismoController(view)
+
+        self.instrucoes_astigmatismo_contoller2 = InstrucoesAstigmatismoController2(view)
+        self.astigmatismo_contoller2 = AstigmatismoController2(view)
+
+        self.acuidade_controller = AcuidadeController(view)
 
         self.resultado_controller = ResultadoController(view)
 

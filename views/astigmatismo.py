@@ -1,29 +1,21 @@
 import customtkinter as ctk
-
 from PIL import Image, ImageTk
 
+
 # Cada item: (imagem_path, texto 1, texto 2, texto 3, número_correto, [opções])
-testes = [
-    ("assets/exame_ponto/grade.png",
+teste = (
+    "assets/astigmatismo/astigmatismo_barras.png", 
      "1 - Tape o Olho Esquerdo.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
-     "3 - Foque no ponto negro no centro. Todas as linhas e quadrados parecem iguais e regulares?", 
+     "3 - Foque no centro do semicírculo. Todas as linhas aparecem na mesma tonalidade de preto?", 
      "Sim", 
      ["Sim", "Não"]
-     ),
-    ("assets/exame_ponto/grade.png", 
-     "1 - Tape o Olho Esquerdo.",
-     "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
-     "3 - Foque no ponto negro no centro. Alguma parte da grelha está em falta, distorcida ou mais escura do que as restantes?", 
-     "Não", 
-     ["Sim", "Não"]
      )
-]
 
 # Adicionar aqui, o que vai ser exibido na tela de resultado.
 resultado = 0
 
-class ExamePontoView(ctk.CTkFrame):
+class AstigmatismoView(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)        
         self.controller = controller
@@ -44,23 +36,23 @@ class ExamePontoView(ctk.CTkFrame):
         self.container.grid_columnconfigure(0, weight=1)
 
         self.index = 0
-        self.testes = testes
+        self.teste = teste
         self.carregar_proximo()
 
     def carregar_proximo(self):
         print("Index do olho direito: ", self.index)
-        if self.index >= len(self.testes):
+        if self.index == 1:
             print("Resultado o exame ponto no olho direito: ", resultado)
             self.index = 0
-            self.controller.switch("instrucoesExamePonto2")
+            self.controller.switch("instrucoesAstigmatismo2")
             self.renderizar_novamente()
             return
 
         for widget in self.container.winfo_children():
             widget.destroy()
 
-        imagem_path, um, dois, tres, resposta_certa, opcoes = self.testes[self.index]
-        img = Image.open(imagem_path).resize((250, 250))
+        imagem_path, um, dois, tres, resposta_certa, opcoes = self.teste
+        img = Image.open(imagem_path).resize((150, 75))
         photo = ImageTk.PhotoImage(img)
 
         # Orientações acima da imagem
@@ -94,11 +86,11 @@ class ExamePontoView(ctk.CTkFrame):
         # Imagem 
         self.label_img = ctk.CTkLabel(self.container, image=photo, text="")
         self.label_img.image = photo
-        self.label_img.grid(row=4, column=0, pady=100, sticky="ew")
+        self.label_img.grid(row=5, column=0, pady=100, sticky="ew")
 
         # Botões das respostas 
         botoes_frame = ctk.CTkFrame(self.container, fg_color="white")        
-        botoes_frame.grid(row=5, column=0, sticky="s")
+        botoes_frame.grid(row=6, column=0, sticky="s")
 
         self.botoes = []
         for i, opcao in enumerate(opcoes):
@@ -137,7 +129,7 @@ if __name__ == "__main__":
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
-    app = ExamePontoView(root)
+    app = AstigmatismoView(root)
     app.grid(sticky="nsew")
 
     root.after(100, lambda: root.state("zoomed"))

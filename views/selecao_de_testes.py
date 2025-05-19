@@ -29,10 +29,10 @@ class SelecaoDeTestesView(ctk.CTkFrame):
 
         self.adicionar_cards([
             {
-                "icone": "assets/abertura_icone.png",
-                "titulo": "Encontre a abertura",
-                "descricao": "Verifique a nitidez da sua visão com o nosso teste de acuidade visual.",
-                "view": "abertura"
+                "icone": "assets/astigmatismo/astigmatismo_icone.png",
+                "titulo": "Evite a visão desfocada",
+                "descricao": "Verifique se há sinais de astigmatismo",
+                "view": "astigmatismo"
             },
             {
                 "icone": "assets/daltonismo_icone.png",

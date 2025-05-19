@@ -3,6 +3,7 @@ from PIL import Image
 from customtkinter import CTkImage
 from . import daltonismo
 from . import exame_ponto2
+from . import astigmatismo2
 
 
 # Cada item: (imagem_path)
@@ -52,12 +53,15 @@ class ResultadoView(ctk.CTkFrame):
         global resultado
         print("Resultado do teste de daltonismo: ", daltonismo.resultado)
         print("Resultado do teste do campo de visão: ", exame_ponto2.resultado)
+        print("Resultado do teste de astigmatismo: ", astigmatismo2.resultado)
         print(resultado)
 
         if daltonismo.resultado != {}:
             resultado = daltonismo.resultado
-        if exame_ponto2.resultado != {}:
+        elif exame_ponto2.resultado != {}:
             resultado = exame_ponto2.resultado
+        elif astigmatismo2.resultado != {}:
+            resultado = astigmatismo2.resultado
 
         # Título
         ctk.CTkLabel(
@@ -142,8 +146,12 @@ class ResultadoView(ctk.CTkFrame):
     def retornar_a_home(self):
         daltonismo.DaltonismoView.apagar_resultado(self)
         print("Daltonismo depois de apagar:", daltonismo.resultado)
+
         exame_ponto2.ExamePontoView2.apagar_resultado(self)
         print("Exame_Ponto depois de apagar:", exame_ponto2.resultado)
+
+        astigmatismo2.AstigmatismoView2.apagar_resultado(self)
+        print("Astigmatismo depois de apagar:", astigmatismo2.resultado)
 
         global resultado
         resultado = {}

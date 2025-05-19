@@ -41,7 +41,7 @@ class HomeView(Frame):
         # Botão principal
         tk.Button(
             content_frame,
-            text="Teste a sua visão",
+            text="Selecione um de nossos testes",
             font=("Helvetica", 24, "bold"),
             bg="#0078ff",
             fg="white",
@@ -49,24 +49,9 @@ class HomeView(Frame):
             relief="flat",
             padx=20,
             pady=10,
-            width=40
-        ).pack(pady=(0, 10))
-
-        # Botão secundário
-        tk.Button(
-            content_frame,
-            text="Ou selecione um teste específico",
-            font=("Helvetica", 24),
-            bg="#1c1c1c",
-            fg="white",
-            activebackground="#333333",
-            relief="solid",
-            borderwidth=1,
-            padx=20,
-            pady=10,
             width=40,
             command=self.controller.ir_para_selecao
-        ).pack()
+        ).pack(pady=(0, 10))        
 
 if __name__ == "__main__":
     root = tk.Tk()
