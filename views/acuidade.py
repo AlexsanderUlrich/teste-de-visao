@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageEnhance
 import math
 import os
 
@@ -8,8 +8,8 @@ teste = (
     "assets/acuidade/abertura.png",
      "1 - Tape o Olho Esquerdo.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
-     "3 - Foque no ponto negro no centro. Todas as linhas e quadrados parecem iguais e regulares?", 
-     0, 
+     "3 - Foque no ponto negro no centro. Todas as linhas e quadrados parecem iguais e regulares?",
+     0,
      [0, 45, 90, 135, 180, 225, 270, 315]
 )
 tamanhos = [4, 6, 8, 12, 18, 30, 46, 58]
@@ -39,7 +39,7 @@ quantidade_de_erros = {
 resultado = 0
 
 """
-Errar dois é vermelho.
+Errar duas vezes o mesmo tamanho é vermelho.
 
 
 """
@@ -136,11 +136,11 @@ class AcuidadeView(ctk.CTkFrame):
 
     def reset(self):
         global resultado
-        resultado = 0        
+        resultado = 0       
 
     def criar_anel(self):
-        centro_x, centro_y = 300, 300
-        raio = 1
+        centro_x, centro_y = 189, 133
+        raio = 100
         angulos = self.angulos
         caminho_topo = "assets/acuidade/abertura.png"  # imagem do anel superior
         caminho_botoes = "assets/acuidade"  # pasta com os botões
@@ -154,24 +154,58 @@ class AcuidadeView(ctk.CTkFrame):
         canvas.create_image(centro_x, 60, image=imagem_topo)
 
         self.botoes = []
+        self.imagens_hover = {}  # dicionário para armazenar versões com opacidade reduzida
+
         for ang in angulos:
             ajuste = ang - 90 
             x = centro_x + raio * math.cos(math.radians(ajuste))
             y = centro_y + raio * math.sin(math.radians(ajuste))
 
-            # Nome do arquivo da imagem correspondente
             caminho_imagem = os.path.join(caminho_botoes, f"botao_{ang}.png")
 
             if not os.path.exists(caminho_imagem):
                 print(f"Imagem não encontrada: {caminho_imagem}")
                 continue
 
-            imagem_botao = ImageTk.PhotoImage(Image.open(caminho_imagem).resize((150, 150)))
-            
+            img_original = Image.open(caminho_imagem).convert("RGBA").resize((80, 80))
+            imagem_botao = ImageTk.PhotoImage(img_original)
+
+            # Criar imagem com opacidade reduzida (por exemplo, 50%)
+            img_hover = img_original.convert("RGBA")
+            alpha = img_hover.split()[3]
+            alpha = ImageEnhance.Brightness(alpha).enhance(0.5)  # 50% opacity
+            img_hover.putalpha(alpha)
+            imagem_hover = ImageTk.PhotoImage(img_hover)
+
             img_id = canvas.create_image(x, y, image=imagem_botao)
-            canvas.tag_bind(img_id, "<Button-1>", lambda e, a=ang: self.verificar_resposta(a))
-            # salvar referência da imagem para evitar garbage collection
+
+            # Guardar as imagens para evitar garbage collection
             self.botoes.append(imagem_botao)
+            self.botoes.append(imagem_hover)
+
+            # Salvar no dicionário para usar no bind
+            self.imagens_hover[img_id] = (imagem_botao, imagem_hover)
+
+            # Bind do clique
+            canvas.tag_bind(img_id, "<Button-1>", lambda e, a=ang, c=self.teste[4]: self.verificar_resposta(a, c))
+
+            # Bind para mouse entrar - troca imagem para a versão com opacidade reduzida
+            def make_on_enter(img_id):
+                def on_enter(event):
+                    normal, hover = self.imagens_hover[img_id]
+                    canvas.itemconfigure(img_id, image=hover)
+                return on_enter
+
+            def make_on_leave(img_id):
+                def on_leave(event):
+                    normal, hover = self.imagens_hover[img_id]
+                    canvas.itemconfigure(img_id, image=normal)
+                return on_leave
+
+            canvas.tag_bind(img_id, "<Enter>", make_on_enter(img_id))
+            canvas.tag_bind(img_id, "<Leave>", make_on_leave(img_id))
+
+
 
     
 if __name__ == "__main__":
