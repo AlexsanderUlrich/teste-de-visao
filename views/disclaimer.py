@@ -1,15 +1,27 @@
 import customtkinter as ctk
 from PIL import Image
 
+texto_disclaimer = """ 
+Este Teste de Visão Online serve para obter uma primeira impressão sobre o atual
+desempenho da visão. Não é um exame médico e não dispensa a consulta de um
+especialista para a prestação de cuidados oftalmológicos adequados. Não se
+destina a ser utilizado no diagnóstico de doenças nem na sua mitigação,
+tratamento ou prevenção. Este teste destina-se apenas a dar-lhe uma ideia geral da
+sua acuidade visual e se é aconselhável realizar um exame oftalmológico por um
+especialista. Recomendamos fazer um exame oftalmológico por um especialista de
+dois em dois anos, ou mais cedo se constatar alterações na sua visão. A RSData
+recusa qualquer responsabilidade por danos ou consequências decorrentes do Teste
+de Visão Online e/ou das informações fornecidas.
+"""
 
-class InstrucoesAstigmatismoView2(ctk.CTkFrame):
+class DisclaimerView(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)
         self.controller = controller  # instância de View
         self.configure(fg_color="white")
         self.grid(row=0, column=0, sticky="nsew")
 
-        self.cards_data = {"icone": "assets/olho_direito_tapado.png", "titulo": "Está com os olhos prontos?", "descricao": "Tape o seu olho direito."}
+        self.cards_data =  {"icone": "assets/exclamacao.png", "titulo": "Leia e aceite antes de começar.", "descricao": texto_disclaimer}
         self.indice_atual = 0
         self.card_frame = None
 
@@ -26,7 +38,7 @@ class InstrucoesAstigmatismoView2(ctk.CTkFrame):
         # Botão de próxima etapa
         self.botao_proximo = ctk.CTkButton(
             self,
-            text="Próximo",
+            text="Aceito",
             command=self.concluir,
             font=ctk.CTkFont(size=22, weight="bold"),
             fg_color="#0078ff",
@@ -96,21 +108,21 @@ class InstrucoesAstigmatismoView2(ctk.CTkFrame):
                 font=ctk.CTkFont(size=20)
             )
             dot.pack(side="left", padx=2)
-
+            
     def concluir(self):
         self.indice_atual = 0
         self.mostrar_card(self.indice_atual)
-        self.controller.switch("astigmatismo2")
+        self.controller.switch("selecaoDeTestes")
 
 # Execução isolada
 if __name__ == "__main__":
     ctk.set_appearance_mode("light")
     root = ctk.CTk()
-    root.title("Instruções do Teste de Visão")
+    root.title("Disclaimer")
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
-    app = InstrucoesAstigmatismoView2(root)
+    app = DisclaimerView(root)
     app.grid(sticky="nsew")
 
     root.after(100, lambda: root.state("zoomed"))

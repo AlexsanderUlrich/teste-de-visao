@@ -32,7 +32,7 @@ class SelecaoDeTestesView(ctk.CTkFrame):
                 "icone": "assets/astigmatismo/astigmatismo_icone.png",
                 "titulo": "Evite a visão desfocada",
                 "descricao": "Verifique se há sinais de astigmatismo",
-                "view": "astigmatismo"
+                "view": "instrucoesAstigmatismo"
             },
             {
                 "icone": "assets/daltonismo_icone.png",
@@ -43,7 +43,7 @@ class SelecaoDeTestesView(ctk.CTkFrame):
             {
                 "icone": "assets/olhePonto_icone.png",
                 "titulo": "Olhe para o ponto",
-                "descricao": "O teste do campo visual consegue detetar problemas com o seu campo visual.",
+                "descricao": "O teste do campo visual consegue detectar problemas com o seu campo visual.",
                 "view": "instrucoesExamePonto"
             }
         ])
@@ -60,6 +60,9 @@ class SelecaoDeTestesView(ctk.CTkFrame):
         )
         card_frame.place(x=0, y=0)
         card_frame.grid_propagate(False)
+        card_frame.grid_rowconfigure(0, weight=1)
+        card_frame.grid_rowconfigure(1, weight=1)
+        card_frame.grid_rowconfigure(2, weight=1)
         card_frame.grid_columnconfigure(0, weight=1)
 
         image_path = card_data.get("icone")
@@ -79,9 +82,10 @@ class SelecaoDeTestesView(ctk.CTkFrame):
             card_frame,
             text=card_data.get("descricao", "Descrição do teste."),
             font=ctk.CTkFont(size=20, family='helvetica'),
+            text_color="gray",
             wraplength=460,
             justify="center"
-        ).grid(row=2, column=0, pady=(5, 10), padx=10, sticky="n")
+        ).grid(row=2, column=0, pady=(5, 10), sticky="n")
 
         def button_event():
             if self.controller:

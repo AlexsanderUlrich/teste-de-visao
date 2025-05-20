@@ -18,6 +18,8 @@ from .astigmatismo_controller import AstigmatismoController
 from .instrucoes_astigmatismo_controller2 import InstrucoesAstigmatismoController2
 from .astigmatismo_controller2 import AstigmatismoController2 
 
+from .disclaimer_controller import DisclaimerContoller
+
 from .acuidade_controller import AcuidadeController
 
 from .resultado_controller import ResultadoController
@@ -43,6 +45,8 @@ class Controller:
 
         self.instrucoes_astigmatismo_contoller2 = InstrucoesAstigmatismoController2(view)
         self.astigmatismo_contoller2 = AstigmatismoController2(view)
+
+        self.disclaimer_controller = DisclaimerContoller(view)
 
         self.acuidade_controller = AcuidadeController(view)
 

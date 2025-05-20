@@ -3,16 +3,15 @@ from PIL import Image, ImageTk
 
 from . import astigmatismo
 
-
 # Cada item: (imagem_path, texto 1, texto 2, texto 3, número_correto, [opções])
 teste = (
     "assets/astigmatismo/astigmatismo_barras.png", 
-     "1 - Tape o Olho Direito.",
-     "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
-     "3 - Foque no centro do semicírculo. Todas as linhas aparecem na mesma tonalidade de preto?", 
-     "Sim", 
-     ["Sim", "Não"]
-     )
+    "1 - Tape o Olho Direito.",
+    "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
+    "3 - Foque no centro do semicírculo. Todas as linhas aparecem na mesma tonalidade de preto?", 
+    "Sim", 
+    ["Sim", "Não"]
+)
 
 # Adicionar aqui, o que vai ser exibido na tela de resultado.
 resultado_direito = 0
@@ -123,15 +122,15 @@ class AstigmatismoView2(ctk.CTkFrame):
 
         resultado_direito = astigmatismo.resultado
 
-        if self.acertos > 0 and resultado_direito > 0:
+        if self.acertos == 1 and resultado_direito == 1:
             resultado["olho_direito"] = "azul"
             resultado["olho_esquerdo"] = "azul"
-        elif self.acertos > 0 and resultado_direito == 0:
-            resultado["olho_direito"] = "azul"
-            resultado["olho_esquerdo"] = "vermelho"
-        elif self.acertos == 0 and resultado_direito == 1:
+        elif self.acertos ==1 and resultado_direito == 0:
             resultado["olho_direito"] = "vermelho"
             resultado["olho_esquerdo"] = "azul"
+        elif self.acertos == 0 and resultado_direito == 1:
+            resultado["olho_direito"] = "azul"
+            resultado["olho_esquerdo"] = "vermelho"
         else:
             resultado["olho_direito"] = "vermelho"
             resultado["olho_esquerdo"] = "vermelho"
@@ -148,7 +147,7 @@ class AstigmatismoView2(ctk.CTkFrame):
             resultado["mensagem"] = "Aparentemente, está a notar diferenças entre as linhas com um dos olhos."
         print("Mensagem dentro da view de astigmatismo2",resultado["mensagem"])
         
-    def definir_resultado(self):     
+    def definir_resultado(self):
         print("Exame de Astigmatismo, acertos OD", resultado_direito)
         print("Exame de Astigmatismo, acertos OE", self.acertos)
 

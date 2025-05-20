@@ -50,7 +50,7 @@ class HomeView(Frame):
             padx=20,
             pady=10,
             width=40,
-            command=self.controller.ir_para_selecao
+            command=self.controller.switch
         ).pack(pady=(0, 10))        
 
 if __name__ == "__main__":

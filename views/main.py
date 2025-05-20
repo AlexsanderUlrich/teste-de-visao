@@ -19,6 +19,8 @@ from .astigmatismo import AstigmatismoView
 from .instrucoes_astigmatismo2 import InstrucoesAstigmatismoView2
 from .astigmatismo2 import AstigmatismoView2
 
+from .disclaimer import DisclaimerView
+
 from .acuidade import AcuidadeView
 
 from .resultado import ResultadoView
@@ -33,6 +35,7 @@ class Frames(TypedDict):
     examePonto: ExamePontoView
     instrucoesExamePonto2: InstrucoesExamePontoView2
     examePonto2: ExamePontoView2
+    disclaimer: DisclaimerView
     resultado: ResultadoView
     
 
@@ -54,6 +57,7 @@ class View:
         self._add_frame(AstigmatismoView,"astigmatismo")
         self._add_frame(InstrucoesAstigmatismoView2,"instrucoesAstigmatismo2")
         self._add_frame(AstigmatismoView2,"astigmatismo2")
+        self._add_frame(DisclaimerView,"disclaimer")
 
 
         self._add_frame(AcuidadeView,"acuidade")

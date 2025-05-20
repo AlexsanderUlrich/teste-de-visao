@@ -1,18 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
 
-texto_disclaimer = """ 
-Este Teste de Visão Online serve para obter uma primeira impressão sobre o atual
-desempenho da visão. Não é um exame médico e não dispensa a consulta de um
-especialista para a prestação de cuidados oftalmológicos adequados. Não se
-destina a ser utilizado no diagnóstico de doenças nem na sua mitigação,
-tratamento ou prevenção. Este teste destina-se apenas a dar-lhe uma ideia geral da
-sua acuidade visual e se é aconselhável realizar um exame oftalmológico por um
-especialista. Recomendamos fazer um exame oftalmológico por um especialista de
-dois em dois anos, ou mais cedo se constatar alterações na sua visão. A RSData
-recusa qualquer responsabilidade por danos ou consequências decorrentes do Teste
-de Visão Online e/ou das informações fornecidas.
-"""
 
 class InstrucoesExamePontoView(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
@@ -22,7 +10,6 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
         self.grid(row=0, column=0, sticky="nsew")
 
         self.cards_data = [
-            {"icone": "assets/exclamacao.png", "titulo": "Leia e aceite antes de começar.", "descricao": texto_disclaimer},
             {"icone": "assets/oculos_lente.png", "titulo": "Esteja preparado(a).", "descricao": "Coloque os seus óculos ou lentes de contacto (se usar)."},
             {"icone": "assets/olho_esquerdo_tapado.png", "titulo": "Está com os olhos prontos?", "descricao": "Tape o seu olho esquerdo."},
             {"icone": "assets/distancia_tela.png", "titulo": "Aproxime-o mais.", "descricao": "Deixe seu dispositivo um pouco mais perto, distância de meio braço ou 30cm."}

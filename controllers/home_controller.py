@@ -11,5 +11,5 @@ class HomeController:
         frame.grid(row=0, column=0, sticky="nsew")
         self.frame = frame
 
-    def ir_para_selecao(self):
-        self.view.switch("selecaoDeTestes")
+    def switch(self):
+        self.view.switch("disclaimer")
