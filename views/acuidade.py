@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import math
-
+import os
 
 # Cada item: (imagem_path, texto 1, texto 2, texto 3, número_correto, [opções])
 teste = (
@@ -9,20 +9,20 @@ teste = (
      "1 - Tape o Olho Esquerdo.",
      "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
      "3 - Foque no ponto negro no centro. Todas as linhas e quadrados parecem iguais e regulares?", 
-     "Sim", 
+     0, 
      [0, 45, 90, 135, 180, 225, 270, 315]
 )
 tamanhos = [4, 6, 8, 12, 18, 30, 46, 58]
 angulos = [0, 45, 90, 135, 180, 225, 270, 315]
 opcoes = {
-    0: "assets/acuidade/opcao_norte.png",
-    45: "assets/acuidade/opcao_nordeste.png",
-    90: "assets/acuidade/opcao_leste.png",
-    135: "assets/acuidade/opcao_sudeste.png",
-    180: "assets/acuidade/opcao_sul.png",
-    225: "assets/acuidade/opcao_sudoeste.png",
-    270: "assets/acuidade/opcao_oeste.png",
-    315: "assets/acuidade/opcao_noroeste.png"
+    0: "assets/acuidade/botao_0.png",
+    45: "assets/acuidade/botao_45.png",
+    90: "assets/acuidade/botao_90.png",
+    135: "assets/acuidade/botao_135.png",
+    180: "assets/acuidade/botao_180.png",
+    225: "assets/acuidade/botao_225.png",
+    270: "assets/acuidade/botao_270.png",
+    315: "assets/acuidade/botao_315.png"
     }
 
 quantidade_de_erros = {
@@ -53,21 +53,20 @@ class AcuidadeView(ctk.CTkFrame):
 
         # Configura linhas e colunas para centralizar tudo
         self.grid_rowconfigure(0, weight=1)  # Espaço acima
-        self.grid_rowconfigure(1, weight=1)  # container        
+        self.grid_rowconfigure(1, weight=0)  # container        
         self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
         self.container = ctk.CTkFrame(self, fg_color="white")
         self.container.grid(row=0, column=0, sticky="nsew")
         self.container.grid_columnconfigure(0, weight=1)
 
         self.index = 0
         self.teste = teste
+        self.angulos = angulos
         self.carregar_proximo()
 
     def carregar_proximo(self):
         print("Index do olho direito: ", self.index)
-        if self.index >= len(self.teste):
+        if self.index >= 1:
             print("Resultado o exame ponto no olho direito: ", resultado)
             self.index = 0
             self.controller.switch("instrucoesExamePonto2")
@@ -78,7 +77,7 @@ class AcuidadeView(ctk.CTkFrame):
             widget.destroy()
 
         imagem_path, um, dois, tres, resposta_certa, opcoes = self.teste
-        img = Image.open(imagem_path).resize((250, 250))
+        img = Image.open(imagem_path).resize((60, 60))
         photo = ImageTk.PhotoImage(img)
 
         # Orientações acima da imagem
@@ -119,16 +118,6 @@ class AcuidadeView(ctk.CTkFrame):
         botoes_frame.grid(row=5, column=0, sticky="s")
 
         self.botoes = []
-        for i, opcao in enumerate(opcoes):
-            btn = ctk.CTkButton(
-                botoes_frame,
-                text=opcao,
-                width=80,
-                height=40,
-                command=lambda b=opcao: self.verificar_resposta(b, resposta_certa)
-            )
-            btn.grid(row=0, column=i, padx=10)
-            self.botoes.append(btn)
         self.criar_anel()
 
     def verificar_resposta(self, escolha, correta):
@@ -151,30 +140,38 @@ class AcuidadeView(ctk.CTkFrame):
 
     def criar_anel(self):
         centro_x, centro_y = 300, 300
-        raio = 200
-        tamanho_img = 50  # tamanho em pixels para a imagem no botão
+        raio = 1
+        angulos = self.angulos
+        caminho_topo = "assets/acuidade/abertura.png"  # imagem do anel superior
+        caminho_botoes = "assets/acuidade"  # pasta com os botões
+        angulo_correto = 120
 
-        for angulo, caminho_img in opcoes.items():
-            # Carregar imagem como CTkImage
-            img = ctk.CTkImage(Image.open(caminho_img), size=(tamanho_img, tamanho_img))
+        imagem_topo = ImageTk.PhotoImage(Image.open(caminho_topo).resize((10, 10)))
 
-            # Calcular posição baseada no ângulo
-            rad = math.radians(angulo)
-            x = centro_x + raio * math.cos(rad)
-            y = centro_y - raio * math.sin(rad)  # y invertido porque eixo y cresce para baixo
+        canvas = ctk.CTkCanvas(self.container, bg="white", highlightthickness=0)
+        canvas.grid(row=5, column=0)
 
-            # Criar botão com imagem
-            btn = ctk.CTkButton(
-                self,
-                image=img,
-                text="",
-                width=tamanho_img,
-                height=tamanho_img,
-                fg_color="transparent",
-                hover=False,
-                command=lambda angulo=angulo: self.selecionar(angulo)
-            )
-            btn.place(x=x - tamanho_img / 2, y=y - tamanho_img / 2)
+        canvas.create_image(centro_x, 60, image=imagem_topo)
+
+        self.botoes = []
+        for ang in angulos:
+            ajuste = ang - 90 
+            x = centro_x + raio * math.cos(math.radians(ajuste))
+            y = centro_y + raio * math.sin(math.radians(ajuste))
+
+            # Nome do arquivo da imagem correspondente
+            caminho_imagem = os.path.join(caminho_botoes, f"botao_{ang}.png")
+
+            if not os.path.exists(caminho_imagem):
+                print(f"Imagem não encontrada: {caminho_imagem}")
+                continue
+
+            imagem_botao = ImageTk.PhotoImage(Image.open(caminho_imagem).resize((150, 150)))
+            
+            img_id = canvas.create_image(x, y, image=imagem_botao)
+            canvas.tag_bind(img_id, "<Button-1>", lambda e, a=ang: self.verificar_resposta(a))
+            # salvar referência da imagem para evitar garbage collection
+            self.botoes.append(imagem_botao)
 
     
 if __name__ == "__main__":
