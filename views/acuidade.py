@@ -7,8 +7,8 @@ import os
 teste = (
     "assets/acuidade/abertura.png",
      "1 - Tape o Olho Esquerdo.",
-     "2 - Aproxime um pouco mais o seu dispositivo, deixando a distância de meio braço ou 30cm.",
-     "3 - Foque no ponto negro no centro. Todas as linhas e quadrados parecem iguais e regulares?",
+     "2 - Mantenha o dispositivo à distância de um braço",
+     "3 - Consegue ver o anel superior? Marque a abertura correspondente no anel inferior.",
      0,
      [0, 45, 90, 135, 180, 225, 270, 315]
 )
@@ -81,6 +81,15 @@ class AcuidadeView(ctk.CTkFrame):
         photo = ImageTk.PhotoImage(img)
 
         # Orientações acima da imagem
+        ctk.CTkLabel(
+            self.container,
+            text="Acuidade Visual",
+            font=ctk.CTkFont(size=20, family='helvetica', weight="bold"),
+            wraplength=1500,
+            text_color="black",
+            justify="center"
+        ).grid(row=0, column=0, pady=(30, 10), sticky="n")
+
         ctk.CTkLabel(
             self.container,
             text=um,

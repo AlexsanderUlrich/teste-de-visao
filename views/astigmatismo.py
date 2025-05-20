@@ -54,6 +54,16 @@ class AstigmatismoView(ctk.CTkFrame):
         imagem_path, um, dois, tres, resposta_certa, opcoes = self.teste
         img = Image.open(imagem_path).resize((150, 75))
         photo = ImageTk.PhotoImage(img)
+        
+        # Nome do exame
+        ctk.CTkLabel(
+            self.container,
+            text="Astigmatismo",
+            font=ctk.CTkFont(size=20, family='helvetica', weight="bold"),
+            wraplength=1500,
+            text_color="black",
+            justify="center"
+        ).grid(row=0, column=0, pady=(30, 10), sticky="n")
 
         # Orientações acima da imagem
         ctk.CTkLabel(
