@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from PIL import Image, ImageTk, ImageEnhance
+from PIL import Image, ImageTk, ImageEnhance, ImageOps
 import math
 import os
 import random
@@ -47,17 +47,17 @@ class AcuidadeView(ctk.CTkFrame):
         self.container.grid(row=0, column=0, sticky="nsew")
         self.container.grid_columnconfigure(0, weight=1)
 
-        self.index = 0
-        self.teste = teste
+        self.index = 0 # Index de quantos perguntas foram respondidas
+        self.teste = teste 
         self.angulos = angulos
         self.tamanhos = tamanhos
-        self.tamanho_index = 4  # Começa no índice 4 -> tamanho 18
+        self.tamanho_index = 4  # Começa no índice 4 -> tamanho 18px
         self.erros_por_tamanho = {}  # Para controle posterior
         self.angulo_atual = 0
         self.carregar_proximo()
 
     def carregar_proximo(self):
-        if self.tamanho_index < 0 or self.tamanho_index >= len(self.tamanhos):
+        if self.index == 8:
             print("Teste finalizado.")
             print("Resultado final:", resultado)
             return
@@ -66,7 +66,7 @@ class AcuidadeView(ctk.CTkFrame):
             widget.destroy()
 
         imagem_path, um, dois, tres = self.teste
-        self.angulo_atual = random.choice(self.angulos)
+        self.angulo_atual = random.choice(self.angulos) # Adiciona aleatóriamente um dos ângulos a variavel.
         tamanho_atual = self.tamanhos[self.tamanho_index]
 
         # Orientações
@@ -75,12 +75,18 @@ class AcuidadeView(ctk.CTkFrame):
         ctk.CTkLabel(self.container, text=dois, font=ctk.CTkFont(size=28, family='helvetica'), wraplength=1500, text_color="gray", justify="center").grid(row=2, column=0, pady=(0, 10), sticky="n")
         ctk.CTkLabel(self.container, text=tres, font=ctk.CTkFont(size=28, family='helvetica', weight="bold"), wraplength=1500, text_color="gray", justify="center").grid(row=3, column=0, pady=(0, 0), sticky="n")
 
-        # Imagem do arco rotacionado
-        img = Image.open(imagem_path).resize((tamanho_atual * 1, tamanho_atual * 1))
-        img = img.rotate(self.angulo_atual)
+        # Imagem do arco rotacionado.
+        escala = 4
+        tam = tamanho_atual * escala #estava perdendo resolução ao rotacionar, por isso primeiro aumenta a escala dela e depois reduz, mantendo a resolução da imagem.
+        img = Image.open(imagem_path).convert("RGBA")
+        img = img.resize((tam, tam), resample=Image.BICUBIC)
+        img = img.rotate(self.angulo_atual, expand=True, resample=Image.BICUBIC) # Rotaciona a imagem
+        img = ImageOps.mirror(img) # Por conta de trabalhar essa rotação diferente da disposição dos botões de resposta, tem que espelhar a imagem depois de rotacionar.
+        img = img.resize((tamanho_atual, tamanho_atual), resample=Image.LANCZOS)
+
         photo = ImageTk.PhotoImage(img)
 
-        self.label_img = ctk.CTkLabel(self.container, image=photo, text="")
+        self.label_img = ctk.CTkLabel(self.container, image=photo, text="", anchor="center")
         self.label_img.image = photo
         self.label_img.grid(row=4, column=0, pady=100, sticky="ew")
 
