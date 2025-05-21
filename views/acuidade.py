@@ -25,15 +25,16 @@ opcoes = {
     315: "assets/acuidade/botao_315.png"
     }
 
-quantidade_de_erros = {
-    4: "", 
-    6: "", 
-    8: "", 
-    12: 2, 
-    18: "", 
-    30: "", 
-    46: "", 
-    58: ""}
+pesos_tamanho = {
+    4: 8,
+    6: 7,
+    8: 6,
+    12: 5,
+    18: 4,
+    30: 3,
+    46: 2,
+    58: 1
+}
 
 # Adicionar aqui, o que vai ser exibido na tela de resultado.
 resultado = 0
@@ -51,9 +52,8 @@ class AcuidadeView(ctk.CTkFrame):
         self.configure(fg_color="white")
         self.grid(row=0, column=0, sticky="nsew")
 
-        # Configura linhas e colunas para centralizar tudo
-        self.grid_rowconfigure(0, weight=1)  # Espaço acima
-        self.grid_rowconfigure(1, weight=0)  # container        
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=0)
         self.grid_columnconfigure(0, weight=1)
         self.container = ctk.CTkFrame(self, fg_color="white")
         self.container.grid(row=0, column=0, sticky="nsew")
@@ -62,15 +62,14 @@ class AcuidadeView(ctk.CTkFrame):
         self.index = 0
         self.teste = teste
         self.angulos = angulos
+        self.angulo_atual = 0
         self.carregar_proximo()
 
     def carregar_proximo(self):
         print("Index do olho direito: ", self.index)
-        if self.index >= 1:
-            print("Resultado o exame ponto no olho direito: ", resultado)
+        if self.index > 8:
+            print("Resultado do exame de acuidade no olho direito: ", resultado)
             self.index = 0
-            self.controller.switch("instrucoesExamePonto2")
-            self.renderizar_novamente()
             return
 
         for widget in self.container.winfo_children():
@@ -80,61 +79,33 @@ class AcuidadeView(ctk.CTkFrame):
         img = Image.open(imagem_path).resize((60, 60))
         photo = ImageTk.PhotoImage(img)
 
-        # Orientações acima da imagem
-        ctk.CTkLabel(
-            self.container,
-            text="Acuidade Visual",
-            font=ctk.CTkFont(size=20, family='helvetica', weight="bold"),
-            wraplength=1500,
-            text_color="black",
-            justify="center"
-        ).grid(row=0, column=0, pady=(30, 10), sticky="n")
-
-        ctk.CTkLabel(
-            self.container,
-            text=um,
-            font=ctk.CTkFont(size=28, family='helvetica'),
-            wraplength=1500,
-            text_color="gray",
-            justify="center"
-        ).grid(row=1, column=0, pady=(30, 10), sticky="n")
-
-        ctk.CTkLabel(
-            self.container,
-            text=dois,
-            font=ctk.CTkFont(size=28, family='helvetica'),
-            wraplength=1500,
-            text_color="gray",
-            justify="center"
-        ).grid(row=2, column=0, pady=(0, 10), sticky="n")
-
-        ctk.CTkLabel(
-            self.container,
-            text=tres,
-            font=ctk.CTkFont(size=28, family='helvetica', weight="bold"),
-            wraplength=1500,
-            text_color="gray",
-            justify="center"
-        ).grid(row=3, column=0, pady=(0, 0), sticky="n")
+        # Orientações
+        ctk.CTkLabel(self.container, text="Acuidade Visual", font=ctk.CTkFont(size=20, family='helvetica', weight="bold"), wraplength=1500, text_color="black", justify="center").grid(row=0, column=0, pady=(30, 10), sticky="n")
+        ctk.CTkLabel(self.container, text=um, font=ctk.CTkFont(size=28, family='helvetica'), wraplength=1500, text_color="gray", justify="center").grid(row=1, column=0, pady=(30, 10), sticky="n")
+        ctk.CTkLabel(self.container, text=dois, font=ctk.CTkFont(size=28, family='helvetica'), wraplength=1500, text_color="gray", justify="center").grid(row=2, column=0, pady=(0, 10), sticky="n")
+        ctk.CTkLabel(self.container, text=tres, font=ctk.CTkFont(size=28, family='helvetica', weight="bold"), wraplength=1500, text_color="gray", justify="center").grid(row=3, column=0, pady=(0, 0), sticky="n")
 
         # Imagem 
         self.label_img = ctk.CTkLabel(self.container, image=photo, text="")
         self.label_img.image = photo
         self.label_img.grid(row=4, column=0, pady=100, sticky="ew")
 
-        # Botões das respostas 
         botoes_frame = ctk.CTkFrame(self.container, fg_color="white")        
         botoes_frame.grid(row=5, column=0, sticky="s")
 
         self.botoes = []
         self.criar_anel()
 
-    def verificar_resposta(self, escolha, correta):
+    def verificar_resposta(self, escolha, tamanho_atual):
         global resultado
-        if escolha == correta:
-            resultado += 1        
+        if escolha == self.angulo_atual:
+            print(f"Acertou! Tamanho {tamanho_atual}")
+            resultado += 1
+        else:
+            print(f"Errou! Nenhum ponto (Tamanho {tamanho_atual})")
 
         self.after(1000, self.avancar)
+
 
     def avancar(self):
         self.index += 1
@@ -151,9 +122,8 @@ class AcuidadeView(ctk.CTkFrame):
         centro_x, centro_y = 189, 133
         raio = 100
         angulos = self.angulos
-        caminho_topo = "assets/acuidade/abertura.png"  # imagem do anel superior
-        caminho_botoes = "assets/acuidade"  # pasta com os botões
-        angulo_correto = 120
+        caminho_topo = "assets/acuidade/abertura.png"
+        caminho_botoes = "assets/acuidade"
 
         imagem_topo = ImageTk.PhotoImage(Image.open(caminho_topo).resize((10, 10)))
 
@@ -163,7 +133,7 @@ class AcuidadeView(ctk.CTkFrame):
         canvas.create_image(centro_x, 60, image=imagem_topo)
 
         self.botoes = []
-        self.imagens_hover = {}  # dicionário para armazenar versões com opacidade reduzida
+        self.imagens_hover = {}
 
         for ang in angulos:
             ajuste = ang - 90 
@@ -179,26 +149,20 @@ class AcuidadeView(ctk.CTkFrame):
             img_original = Image.open(caminho_imagem).convert("RGBA").resize((80, 80))
             imagem_botao = ImageTk.PhotoImage(img_original)
 
-            # Criar imagem com opacidade reduzida (por exemplo, 50%)
             img_hover = img_original.convert("RGBA")
             alpha = img_hover.split()[3]
-            alpha = ImageEnhance.Brightness(alpha).enhance(0.5)  # 50% opacity
+            alpha = ImageEnhance.Brightness(alpha).enhance(0.5)
             img_hover.putalpha(alpha)
             imagem_hover = ImageTk.PhotoImage(img_hover)
 
             img_id = canvas.create_image(x, y, image=imagem_botao)
 
-            # Guardar as imagens para evitar garbage collection
             self.botoes.append(imagem_botao)
             self.botoes.append(imagem_hover)
-
-            # Salvar no dicionário para usar no bind
             self.imagens_hover[img_id] = (imagem_botao, imagem_hover)
 
-            # Bind do clique
             canvas.tag_bind(img_id, "<Button-1>", lambda e, a=ang, c=self.teste[4]: self.verificar_resposta(a, c))
 
-            # Bind para mouse entrar - troca imagem para a versão com opacidade reduzida
             def make_on_enter(img_id):
                 def on_enter(event):
                     normal, hover = self.imagens_hover[img_id]
@@ -215,8 +179,6 @@ class AcuidadeView(ctk.CTkFrame):
             canvas.tag_bind(img_id, "<Leave>", make_on_leave(img_id))
 
 
-
-    
 if __name__ == "__main__":
     ctk.set_appearance_mode("light")
     root = ctk.CTk()
