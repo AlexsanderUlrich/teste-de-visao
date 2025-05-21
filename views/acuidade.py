@@ -4,30 +4,18 @@ import math
 import os
 import random
 
-# Cada item: (imagem_path, texto 1, texto 2, texto 3, número_correto, [opções])
+# Cada item: (imagem_path, texto 1, texto 2, texto 3)
 teste = (
     "assets/acuidade/abertura.png",
     "1 - Tape o Olho Esquerdo.",
     "2 - Mantenha o dispositivo à distância de um braço",
     "3 - Consegue ver o anel superior? Marque a abertura correspondente no anel inferior.",
 )
+tamanhos = [6, 8, 10, 14, 20, 32, 48, 60]
+pesos_tamanho = { 6: 8, 8: 7, 10: 6, 14: 5, 20: 4, 32: 3, 48: 2, 60: 1 }
 
-tamanhos = [4, 6, 8, 12, 18, 30, 46, 58]
 angulos = [0, 45, 90, 135, 180, 225, 270, 315]
-opcoes = {
-    ang: f"assets/acuidade/botao_{ang}.png" for ang in angulos
-}
-
-pesos_tamanho = {
-    4: 8,
-    6: 7,
-    8: 6,
-    12: 5,
-    18: 4,
-    30: 3,
-    46: 2,
-    58: 1
-}
+opcoes = { ang: f"assets/acuidade/botao_{ang}.png" for ang in angulos }
 
 resultado = 0
 
@@ -54,6 +42,7 @@ class AcuidadeView(ctk.CTkFrame):
         self.tamanho_index = 4  # Começa no índice 4 -> tamanho 18px
         self.erros_por_tamanho = {}  # Para controle posterior
         self.angulo_atual = 0
+        self.botoes_anel = []
         self.carregar_proximo()
 
     def carregar_proximo(self):
@@ -65,6 +54,7 @@ class AcuidadeView(ctk.CTkFrame):
         for widget in self.container.winfo_children():
             widget.destroy()
 
+        self.feedback_id = None  # Para limpar depois
         imagem_path, um, dois, tres = self.teste
         self.angulo_atual = random.choice(self.angulos) # Adiciona aleatóriamente um dos ângulos a variavel.
         tamanho_atual = self.tamanhos[self.tamanho_index]
@@ -94,22 +84,40 @@ class AcuidadeView(ctk.CTkFrame):
         botoes_frame.grid(row=5, column=0, sticky="s")
 
         self.botoes = []
+        self.imagens_hover = {}
         self.criar_anel()
 
     def verificar_resposta(self, escolha):
         global resultado
         tamanho_atual = self.tamanhos[self.tamanho_index]
 
+        # Remover botão central anterior, se houver
+        if hasattr(self, "feedback_id") and self.feedback_id is not None:
+            self.canvas.delete(self.feedback_id)
+            self.feedback_id = None
+
         if escolha == self.angulo_atual:
             print(f"Acertou! Tamanho: {tamanho_atual} | Angulo: {self.angulo_atual} | Escolha: {escolha}")
             resultado += pesos_tamanho[tamanho_atual]
+            cor_feedback = "green"
+            simbolo = "✓"
             if self.tamanho_index > 0:
-                self.tamanho_index -= 1  # Aumenta dificuldade
+                self.tamanho_index -= 1
         else:
             print(f"Errou! Tamanho: {tamanho_atual} | Angulo: {self.angulo_atual} | Escolha: {escolha}")
             self.erros_por_tamanho[tamanho_atual] = self.erros_por_tamanho.get(tamanho_atual, 0) + 1
+            cor_feedback = "red"
+            simbolo = "✗"
             if self.tamanho_index < len(self.tamanhos) - 1:
-                self.tamanho_index += 1  # Reduz dificuldade
+                self.tamanho_index += 1
+
+        # Adicionar botão com ✓ ou ✗ no centro do anel
+        self.feedback_id = self.canvas.create_text(
+            189, 133,
+            text=simbolo,
+            fill=cor_feedback,
+            font=("Helvetica", 48, "bold")
+        )
 
         self.after(1000, self.avancar)
 
@@ -132,8 +140,8 @@ class AcuidadeView(ctk.CTkFrame):
         angulos = self.angulos
         caminho_botoes = "assets/acuidade"
 
-        canvas = ctk.CTkCanvas(self.container, bg="white", highlightthickness=0)
-        canvas.grid(row=5, column=0)
+        self.canvas = ctk.CTkCanvas(self.container, bg="white", highlightthickness=0)
+        self.canvas.grid(row=5, column=0)
 
         self.botoes = []
         self.imagens_hover = {}
@@ -158,28 +166,28 @@ class AcuidadeView(ctk.CTkFrame):
             img_hover.putalpha(alpha)
             imagem_hover = ImageTk.PhotoImage(img_hover)
 
-            img_id = canvas.create_image(x, y, image=imagem_botao)
+            img_id = self.canvas.create_image(x, y, image=imagem_botao)
 
             self.botoes.append(imagem_botao)
             self.botoes.append(imagem_hover)
             self.imagens_hover[img_id] = (imagem_botao, imagem_hover)
 
-            canvas.tag_bind(img_id, "<Button-1>", lambda e, a=ang: self.verificar_resposta(a))
+            self.canvas.tag_bind(img_id, "<Button-1>", lambda e, a=ang: self.verificar_resposta(a))
 
             def make_on_enter(img_id):
                 def on_enter(event):
                     _, hover = self.imagens_hover[img_id]
-                    canvas.itemconfigure(img_id, image=hover)
+                    self.canvas.itemconfigure(img_id, image=hover)
                 return on_enter
 
             def make_on_leave(img_id):
                 def on_leave(event):
                     normal, _ = self.imagens_hover[img_id]
-                    canvas.itemconfigure(img_id, image=normal)
+                    self.canvas.itemconfigure(img_id, image=normal)
                 return on_leave
 
-            canvas.tag_bind(img_id, "<Enter>", make_on_enter(img_id))
-            canvas.tag_bind(img_id, "<Leave>", make_on_leave(img_id))
+            self.canvas.tag_bind(img_id, "<Enter>", make_on_enter(img_id))
+            self.canvas.tag_bind(img_id, "<Leave>", make_on_leave(img_id))
 
 
 if __name__ == "__main__":
