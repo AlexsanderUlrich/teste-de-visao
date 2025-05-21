@@ -50,7 +50,7 @@ class ExamePontoView(ctk.CTkFrame):
     def carregar_proximo(self):
         print("Index do olho direito: ", self.index)
         if self.index >= len(self.testes):
-            print("Resultado o exame ponto no olho direito: ", resultado)
+            print("Resultado do exame ponto no olho direito: ", resultado)
             self.index = 0
             self.controller.switch("instrucoesExamePonto2")
             self.renderizar_novamente()

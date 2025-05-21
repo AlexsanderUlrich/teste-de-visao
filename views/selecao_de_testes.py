@@ -29,19 +29,25 @@ class SelecaoDeTestesView(ctk.CTkFrame):
 
         self.adicionar_cards([
             {
+                "icone": "assets/acuidade/abertura_icone.png",
+                "titulo": "Encontre a abertura",
+                "descricao": "Verifique a nitidez da sua visão com o nosso teste de acuidade visual.",
+                "view": "instrucoesAcuidade"
+            },
+            {
                 "icone": "assets/astigmatismo/astigmatismo_icone.png",
                 "titulo": "Evite a visão desfocada",
                 "descricao": "Verifique se há sinais de astigmatismo",
                 "view": "instrucoesAstigmatismo"
             },
             {
-                "icone": "assets/daltonismo_icone.png",
+                "icone": "assets/visao_cromatica/daltonismo_icone.png",
                 "titulo": "Olhe para o arco-íris.",
                 "descricao": "Consegue distinguir claramente as cores? O nosso teste da visão cromática vai determinar até que ponto.",
                 "view": "instrucoesDaltonismo"
             },
             {
-                "icone": "assets/olhePonto_icone.png",
+                "icone": "assets/exame_ponto/olhePonto_icone.png",
                 "titulo": "Olhe para o ponto",
                 "descricao": "O teste do campo visual consegue detectar problemas com o seu campo visual.",
                 "view": "instrucoesExamePonto"

@@ -11,8 +11,8 @@ class InstrucoesDaltonismoView(ctk.CTkFrame):
 
         self.cards_data = [
             {"icone": "assets/oculos_lente.png", "titulo": "Esteja preparado(a)", "descricao": "Coloque os seus óculos ou lentes de contacto (se usar)."},
-            {"icone": "assets/dois_olhos (Grande).png", "titulo": "Está com os olhos prontos?", "descricao": "Mantenha os dois olhos abertos"},
-            {"icone": "assets/distancia_tela.png", "titulo": "Mantenha distância", "descricao": "Se posicione em cima da marcação que está no chão."}
+            {"icone": "assets/dois_olhos.png", "titulo": "Está com os olhos prontos?", "descricao": "Mantenha os dois olhos abertos"},
+            {"icone": "assets/distancia_tela.png", "titulo": "Mantenha distância", "descricao": "Mantenha o seu dispositivo à distância de um braço durante o teste."}
         ]
         self.indice_atual = 0
         self.card_frame = None
@@ -58,8 +58,8 @@ class InstrucoesDaltonismoView(ctk.CTkFrame):
 
         # Imagem
         img = Image.open(dados["icone"])
-        img = img.resize((400, 200), Image.Resampling.LANCZOS)
-        ctk_image = ctk.CTkImage(light_image=img, dark_image=img, size=(400, 200))
+        img = img.resize((300, 200), Image.Resampling.LANCZOS)
+        ctk_image = ctk.CTkImage(light_image=img, dark_image=img, size=(300, 200))
 
         ctk.CTkLabel(
             self.card_frame,

@@ -2,7 +2,7 @@ import customtkinter as ctk
 from PIL import Image
 
 
-class InstrucoesExamePontoView(ctk.CTkFrame):
+class InstrucoesAcuidadeView(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)
         self.controller = controller  # instância de View
@@ -10,9 +10,9 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
         self.grid(row=0, column=0, sticky="nsew")
 
         self.cards_data = [
-            {"icone": "assets/oculos_lente.png", "titulo": "Esteja preparado(a).", "descricao": "Coloque os seus óculos ou lentes de contacto (se usar)."},
             {"icone": "assets/olho_esquerdo_tapado.png", "titulo": "Está com os olhos prontos?", "descricao": "Tape o seu olho esquerdo."},
-            {"icone": "assets/distancia_tela.png", "titulo": "Aproxime-o mais.", "descricao": "Deixe seu dispositivo um pouco mais perto, distância de meio braço ou 30cm."}
+            {"icone": "assets/distancia_tela.png", "titulo": "Mantenha distância", "descricao": "Mantenha o seu dispositivo à distância de um braço durante o teste."},
+            {"icone": "assets/abertura_instrucao.png", "titulo": "Marque o Local", "descricao": "Consegue ver o anel superior? Marque o local correspondente no anel inferior."}
         ]
         self.indice_atual = 0
         self.card_frame = None
@@ -120,7 +120,7 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
     def concluir(self):
         self.indice_atual = 0
         self.mostrar_card(self.indice_atual)
-        self.controller.switch("examePonto")
+        self.controller.switch("acuidade")
 
 # Execução isolada
 if __name__ == "__main__":
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
-    app = InstrucoesExamePontoView(root)
+    app = InstrucoesAcuidadeView(root)
     app.grid(sticky="nsew")
 
     root.after(100, lambda: root.state("zoomed"))

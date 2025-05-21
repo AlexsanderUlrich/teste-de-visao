@@ -1,6 +1,7 @@
 from views.main import View
 
 from .home_controller import HomeController
+from .disclaimer_controller import DisclaimerContoller
 from .selecao_de_testes_controller import SelecaoDeTestesController
 
 from .instrucoes_daltonismo_controller import InstrucoesDaltonismoController
@@ -18,9 +19,11 @@ from .astigmatismo_controller import AstigmatismoController
 from .instrucoes_astigmatismo_controller2 import InstrucoesAstigmatismoController2
 from .astigmatismo_controller2 import AstigmatismoController2 
 
-from .disclaimer_controller import DisclaimerContoller
-
+from .instrucoes_acuidade_controller import InstrucoesAcuidadeController
 from .acuidade_controller import AcuidadeController
+
+from .instrucoes_acuidade_controller2 import InstrucoesAcuidadeController2
+from .acuidade_controller2 import AcuidadeController2
 
 from .resultado_controller import ResultadoController
 
@@ -29,6 +32,7 @@ class Controller:
     def __init__(self, view: View) -> None:
         self.view = view
         self.home_controller = HomeController(view)
+        self.disclaimer_controller = DisclaimerContoller(view)
         self.selecao_de_testes_controller = SelecaoDeTestesController(view)
 
         self.instrucoes_daltonismo_controller = InstrucoesDaltonismoController(view)
@@ -46,9 +50,11 @@ class Controller:
         self.instrucoes_astigmatismo_contoller2 = InstrucoesAstigmatismoController2(view)
         self.astigmatismo_contoller2 = AstigmatismoController2(view)
 
-        self.disclaimer_controller = DisclaimerContoller(view)
-
+        self.instrucoes_acuidade_contoller = InstrucoesAcuidadeController(view)
         self.acuidade_controller = AcuidadeController(view)
+        
+        self.instrucoes_acuidade_contoller2 = InstrucoesAcuidadeController2(view)
+        self.acuidade_controller2 = AcuidadeController2(view)
 
         self.resultado_controller = ResultadoController(view)
 

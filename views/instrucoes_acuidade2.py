@@ -2,18 +2,14 @@ import customtkinter as ctk
 from PIL import Image
 
 
-class InstrucoesExamePontoView(ctk.CTkFrame):
+class InstrucoesAcuidadeView2(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)
         self.controller = controller  # instância de View
         self.configure(fg_color="white")
         self.grid(row=0, column=0, sticky="nsew")
 
-        self.cards_data = [
-            {"icone": "assets/oculos_lente.png", "titulo": "Esteja preparado(a).", "descricao": "Coloque os seus óculos ou lentes de contacto (se usar)."},
-            {"icone": "assets/olho_esquerdo_tapado.png", "titulo": "Está com os olhos prontos?", "descricao": "Tape o seu olho esquerdo."},
-            {"icone": "assets/distancia_tela.png", "titulo": "Aproxime-o mais.", "descricao": "Deixe seu dispositivo um pouco mais perto, distância de meio braço ou 30cm."}
-        ]
+        self.cards_data = {"icone": "assets/olho_direito_tapado.png", "titulo": "Está com os olhos prontos?", "descricao": "Tape o seu olho direito."}
         self.indice_atual = 0
         self.card_frame = None
 
@@ -31,7 +27,7 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
         self.botao_proximo = ctk.CTkButton(
             self,
             text="Próximo",
-            command=self.proximo_card,
+            command=self.concluir,
             font=ctk.CTkFont(size=22, weight="bold"),
             fg_color="#0078ff",
             hover_color="#005ccc",
@@ -54,7 +50,7 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
         for i in range(7):
             self.card_frame.grid_rowconfigure(i, weight=1)
 
-        dados = self.cards_data[index]
+        dados = self.cards_data
 
         # Imagem
         img = Image.open(dados["icone"])
@@ -86,13 +82,12 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
         ).grid(row=4, column=0, pady=(0, 0), padx=40, sticky="n")
 
         self.atualizar_indicadores()
-        self.atualizar_botao()
 
     def atualizar_indicadores(self):
         for widget in self.indicadores_frame.winfo_children():
             widget.destroy()
 
-        for i in range(len(self.cards_data)):
+        for i in range(1):
             cor = "#0078ff" if i == self.indice_atual else "lightgray"
             dot = ctk.CTkLabel(
                 self.indicadores_frame,
@@ -102,25 +97,10 @@ class InstrucoesExamePontoView(ctk.CTkFrame):
             )
             dot.pack(side="left", padx=2)
 
-    def atualizar_botao(self):
-        if self.indice_atual == 0:
-            self.botao_proximo.configure(text="Aceito", command=self.proximo_card)
-
-        elif self.indice_atual == len(self.cards_data) - 1:
-            self.botao_proximo.configure(text="Estou pronto(a)", command=self.concluir)
-            
-        else:
-            self.botao_proximo.configure(text="Próximo", command=self.proximo_card)
-
-    def proximo_card(self):
-        if self.indice_atual < len(self.cards_data) - 1:
-            self.indice_atual += 1
-            self.mostrar_card(self.indice_atual)
-
     def concluir(self):
         self.indice_atual = 0
         self.mostrar_card(self.indice_atual)
-        self.controller.switch("examePonto")
+        self.controller.switch("acuidade2")
 
 # Execução isolada
 if __name__ == "__main__":
@@ -130,7 +110,7 @@ if __name__ == "__main__":
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
-    app = InstrucoesExamePontoView(root)
+    app = InstrucoesAcuidadeView2(root)
     app.grid(sticky="nsew")
 
     root.after(100, lambda: root.state("zoomed"))

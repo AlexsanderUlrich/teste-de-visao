@@ -2,6 +2,7 @@ from typing import TypedDict
 
 from .root import Root
 from .home import HomeView
+from .disclaimer import DisclaimerView
 from .selecao_de_testes import SelecaoDeTestesView
 
 from .instrucoes_daltonismo import InstrucoesDaltonismoView
@@ -19,23 +20,35 @@ from .astigmatismo import AstigmatismoView
 from .instrucoes_astigmatismo2 import InstrucoesAstigmatismoView2
 from .astigmatismo2 import AstigmatismoView2
 
-from .disclaimer import DisclaimerView
-
+from .instrucoes_acuidade import InstrucoesAcuidadeView
 from .acuidade import AcuidadeView
+
+from .instrucoes_acuidade2 import InstrucoesAcuidadeView2
+from .acuidade2 import AcuidadeView2
 
 from .resultado import ResultadoView
 
 class Frames(TypedDict):
 
     home: HomeView
+    disclaimer: DisclaimerView
     selecaoDeTestes: SelecaoDeTestesView
+
     instrucoesDaltonismo: InstrucoesDaltonismoView
     daltonismo: DaltonismoView
+
     instrucoesExamePonto: InstrucoesExamePontoView
     examePonto: ExamePontoView
+
     instrucoesExamePonto2: InstrucoesExamePontoView2
     examePonto2: ExamePontoView2
-    disclaimer: DisclaimerView
+
+    instrucoesAcuidadeView: InstrucoesAcuidadeView
+    acuidadeView: AcuidadeView
+
+    instrucoesAcuidadeView2: InstrucoesAcuidadeView2
+    acuidadeView2: AcuidadeView2
+
     resultado: ResultadoView
     
 
@@ -46,6 +59,7 @@ class View:
         self.frames: Frames = {}
 
         self._add_frame(HomeView, "home")
+        self._add_frame(DisclaimerView,"disclaimer")
         self._add_frame(SelecaoDeTestesView, "selecaoDeTestes")
         self._add_frame(InstrucoesDaltonismoView, "instrucoesDaltonismo")
         self._add_frame(DaltonismoView, "daltonismo")
@@ -57,10 +71,12 @@ class View:
         self._add_frame(AstigmatismoView,"astigmatismo")
         self._add_frame(InstrucoesAstigmatismoView2,"instrucoesAstigmatismo2")
         self._add_frame(AstigmatismoView2,"astigmatismo2")
-        self._add_frame(DisclaimerView,"disclaimer")
-
-
+        self._add_frame(InstrucoesAcuidadeView,"instrucoesAcuidade")
         self._add_frame(AcuidadeView,"acuidade")
+        self._add_frame(InstrucoesAcuidadeView2,"instrucoesAcuidade2")
+        self._add_frame(AcuidadeView2,"acuidade2")
+
+
 
         self._add_frame(ResultadoView, "resultado")
 

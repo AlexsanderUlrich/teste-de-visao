@@ -4,6 +4,7 @@ from customtkinter import CTkImage
 from . import daltonismo
 from . import exame_ponto2
 from . import astigmatismo2
+from . import acuidade2
 
 
 # Cada item: (imagem_path)
@@ -54,6 +55,7 @@ class ResultadoView(ctk.CTkFrame):
         print("Resultado do teste de daltonismo: ", daltonismo.resultado)
         print("Resultado do teste do campo de visão: ", exame_ponto2.resultado)
         print("Resultado do teste de astigmatismo: ", astigmatismo2.resultado)
+        print("Resultado do teste de acuidade: ", acuidade2.resultado)
         print(resultado)
 
         if daltonismo.resultado != {}:
@@ -62,6 +64,8 @@ class ResultadoView(ctk.CTkFrame):
             resultado = exame_ponto2.resultado
         elif astigmatismo2.resultado != {}:
             resultado = astigmatismo2.resultado
+        elif acuidade2.resultado != {}:
+            resultado = acuidade2.resultado
 
         # Título
         ctk.CTkLabel(
@@ -152,6 +156,9 @@ class ResultadoView(ctk.CTkFrame):
 
         astigmatismo2.AstigmatismoView2.apagar_resultado(self)
         print("Astigmatismo depois de apagar:", astigmatismo2.resultado)
+
+        acuidade2.AcuidadeView2.apagar_resultado(self)
+        print("Acuidade depois de apagar:", acuidade2.resultado)
 
         global resultado
         resultado = {}

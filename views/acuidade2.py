@@ -4,10 +4,12 @@ import math
 import os
 import random
 
+from . import acuidade
+
 # Cada item: (imagem_path, texto 1, texto 2, texto 3)
 teste = (
     "assets/acuidade/abertura.png",
-    "1 - Tape o Olho Esquerdo.",
+    "1 - Tape o Olho direito.",
     "2 - Mantenha o dispositivo à distância de um braço",
     "3 - Consegue ver o anel superior? Marque a abertura correspondente no anel inferior.",
 )
@@ -19,9 +21,11 @@ opcoes = { ang: f"assets/acuidade/botao_{ang}.png" for ang in angulos }
 opcoes_verde = { ang: f"assets/acuidade/botao_{ang}_verde.png" for ang in angulos }
 opcoes_vermelho = { ang: f"assets/acuidade/botao_{ang}_vermelho.png" for ang in angulos }
 
-resultado = 0
+resultado_direito = 0
+resultado_esquerdo = 0
+resultado = {}
 
-class AcuidadeView(ctk.CTkFrame):
+class AcuidadeView2(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
         super().__init__(master, **kwargs)
         self.controller = controller
@@ -47,10 +51,13 @@ class AcuidadeView(ctk.CTkFrame):
 
     def carregar_proximo(self):
         if self.index == 8:
-            print("Resultado do exame de acuidade no olho direito:", resultado)
+            print("Resultado do exame de acuidade no olho esquerdo:", resultado_esquerdo)
+            self.definir_resultado()
             self.index = 0
-            self.controller.switch("instrucoesAcuidade2")
-            self.renderizar_novamente()
+            self.tamanho_index = 4
+            self.reset()
+            self.carregar_proximo()
+            self.controller.switch("resultado")
             return
 
         for widget in self.container.winfo_children():
@@ -90,7 +97,7 @@ class AcuidadeView(ctk.CTkFrame):
         self.criar_anel()
 
     def verificar_resposta(self, escolha):
-        global resultado
+        global resultado_esquerdo
         tamanho_atual = self.tamanhos[self.tamanho_index]
 
         # Remover botão central anterior, se houver
@@ -111,7 +118,7 @@ class AcuidadeView(ctk.CTkFrame):
 
         if escolha == self.angulo_atual:
             print(f"Acertou! Tamanho: {tamanho_atual} | Angulo: {self.angulo_atual} | Escolha: {escolha}")
-            resultado += pesos_tamanho[tamanho_atual]
+            resultado_esquerdo += pesos_tamanho[tamanho_atual]
             cor_feedback = "#00a170"
             simbolo = "✓"
             if self.tamanho_index > 0:
@@ -159,14 +166,62 @@ class AcuidadeView(ctk.CTkFrame):
     def avancar(self):
         self.index += 1
         self.carregar_proximo()
+    
+    def definir_mensagem_final(self, resultado):
+        if resultado["olho_esquerdo"] == "vermelho" and resultado["olho_direito"] == "vermelho":
+            resultado["mensagem"] = "A sua acuidade visual em ambos os olhos parece ser reduzida."
+        elif resultado["olho_esquerdo"] == "vermelho" or resultado["olho_direito"] == "vermelho":
+            resultado["mensagem"] = "A sua acuidade visual em um dos olhos parece ser reduzida."
+        elif resultado["olho_esquerdo"] =="azul" and resultado["olho_direito"] == "azul":
+            resultado["mensagem"] = "A sua acuidade visual em ambos os olhos parece ser Excelente."
+        else:
+            resultado["mensagem"] = "A sua acuidade visual em ambos os olhos parece ser boa"
 
-    def renderizar_novamente(self):
-        self.carregar_proximo()
+    def cor_olho_direito(self, resultado_final, resultado_direito):
+        if resultado_direito <= 20:
+            resultado_final["olho_direito"] = "vermelho"
+        elif resultado_direito >= 36:
+            resultado_final["olho_direito"] = "azul"
+        else:
+            resultado_final["olho_direito"] = "amarelo"
+
+    def cor_olho_esquerdo(self, resultado_final, resultado_esquerdo):       
+        if resultado_esquerdo <= 20:
+            resultado_final["olho_esquerdo"] = "vermelho"
+        elif resultado_esquerdo >= 36:
+            resultado_final["olho_esquerdo"] = "azul"
+        else:
+            resultado_final["olho_esquerdo"] = "amarelo" 
+
+    def definir_resultado(self):
+        global resultado
+        global resultado_esquerdo
+        global resultado_direito
+        resultado_direito = acuidade.resultado
+
+        print("Exame de acuidade visual, quantidade de acertos OD: ", resultado_direito)
+        print("Exame de acuidade visual, quantidade de acertos OE: ", resultado_esquerdo)       
+              
+        resultado["titulo"] = "Acuidade Visual"
+        self.cor_olho_direito(resultado, resultado_direito)
+        self.cor_olho_esquerdo(resultado, resultado_esquerdo)
+        self.definir_mensagem_final(resultado)
+
+        print("Resultado final do exame de acuidade visual: ", resultado)
 
     def reset(self):
+        global resultado_esquerdo
+        resultado_esquerdo = 0
+        acuidade.AcuidadeView.reset(self)
+    
+    def apagar_resultado(self):
         global resultado
-        resultado = 0
-        self.tamanho_index = 4
+        global resultado_direito
+        global resultado_esquerdo
+
+        resultado = {}
+        resultado_direito = 0
+        resultado_esquerdo = 0
 
     def criar_anel(self):
         centro_x, centro_y = 189, 133
@@ -229,7 +284,7 @@ if __name__ == "__main__":
     root.rowconfigure(0, weight=1)
     root.columnconfigure(0, weight=1)
 
-    app = AcuidadeView(root)
+    app = AcuidadeView2(root)
     app.grid(sticky="nsew")
 
     root.after(100, lambda: root.state("zoomed"))

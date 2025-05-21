@@ -54,8 +54,8 @@ class InstrucoesAstigmatismoView2(ctk.CTkFrame):
 
         # Imagem
         img = Image.open(dados["icone"])
-        img = img.resize((400, 200), Image.Resampling.LANCZOS)
-        ctk_image = ctk.CTkImage(light_image=img, dark_image=img, size=(400, 200))
+        img = img.resize((300, 200), Image.Resampling.LANCZOS)
+        ctk_image = ctk.CTkImage(light_image=img, dark_image=img, size=(300, 200))
 
         ctk.CTkLabel(
             self.card_frame,
