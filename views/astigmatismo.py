@@ -71,7 +71,7 @@ class AstigmatismoView(ctk.CTkFrame):
             text=um,
             font=ctk.CTkFont(size=28, family='helvetica'),
             wraplength=1500,
-            text_color="gray",
+            text_color="#696a76",
             justify="center"
         ).grid(row=1, column=0, pady=(30, 10), sticky="n")
 
@@ -80,7 +80,7 @@ class AstigmatismoView(ctk.CTkFrame):
             text=dois,
             font=ctk.CTkFont(size=28, family='helvetica'),
             wraplength=1500,
-            text_color="gray",
+            text_color="#696a76",
             justify="center"
         ).grid(row=2, column=0, pady=(0, 10), sticky="n")
 
@@ -89,7 +89,7 @@ class AstigmatismoView(ctk.CTkFrame):
             text=tres,
             font=ctk.CTkFont(size=28, family='helvetica', weight="bold"),
             wraplength=1500,
-            text_color="gray",
+            text_color="#696a76",
             justify="center"
         ).grid(row=3, column=0, pady=(0, 0), sticky="n")
 

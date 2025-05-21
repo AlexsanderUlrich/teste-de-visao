@@ -123,7 +123,7 @@ class ResultadoView(ctk.CTkFrame):
             self.container,
             text=texto_procurar_profissiona,
             font=ctk.CTkFont(size=18, family='helvetica'),
-            text_color="gray",
+            text_color="#696a76",
             justify="center",
             wraplength=600
         ).grid(row=6, column=0, sticky="s")

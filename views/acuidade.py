@@ -16,9 +16,10 @@ pesos_tamanho = { 6: 8, 8: 7, 10: 6, 14: 5, 20: 4, 32: 3, 48: 2, 60: 1 }
 
 angulos = [0, 45, 90, 135, 180, 225, 270, 315]
 opcoes = { ang: f"assets/acuidade/botao_{ang}.png" for ang in angulos }
+opcoes_verde = { ang: f"assets/acuidade/botao_{ang}_verde.png" for ang in angulos }
+opcoes_vermelho = { ang: f"assets/acuidade/botao_{ang}_vermelho.png" for ang in angulos }
 
 resultado = 0
-
 
 class AcuidadeView(ctk.CTkFrame):
     def __init__(self, master=None, controller=None, **kwargs):
@@ -42,7 +43,7 @@ class AcuidadeView(ctk.CTkFrame):
         self.tamanho_index = 4  # Começa no índice 4 -> tamanho 18px
         self.erros_por_tamanho = {}  # Para controle posterior
         self.angulo_atual = 0
-        self.botoes_anel = []
+        self.botoes_anel = {}
         self.carregar_proximo()
 
     def carregar_proximo(self):
@@ -61,9 +62,9 @@ class AcuidadeView(ctk.CTkFrame):
 
         # Orientações
         ctk.CTkLabel(self.container, text="Acuidade Visual", font=ctk.CTkFont(size=20, family='helvetica', weight="bold"), wraplength=1500, text_color="black", justify="center").grid(row=0, column=0, pady=(30, 10), sticky="n")
-        ctk.CTkLabel(self.container, text=um, font=ctk.CTkFont(size=28, family='helvetica'), wraplength=1500, text_color="gray", justify="center").grid(row=1, column=0, pady=(30, 10), sticky="n")
-        ctk.CTkLabel(self.container, text=dois, font=ctk.CTkFont(size=28, family='helvetica'), wraplength=1500, text_color="gray", justify="center").grid(row=2, column=0, pady=(0, 10), sticky="n")
-        ctk.CTkLabel(self.container, text=tres, font=ctk.CTkFont(size=28, family='helvetica', weight="bold"), wraplength=1500, text_color="gray", justify="center").grid(row=3, column=0, pady=(0, 0), sticky="n")
+        ctk.CTkLabel(self.container, text=um, font=ctk.CTkFont(size=28, family='helvetica'), wraplength=1500, text_color="#696a76", justify="center").grid(row=1, column=0, pady=(30, 10), sticky="n")
+        ctk.CTkLabel(self.container, text=dois, font=ctk.CTkFont(size=28, family='helvetica'), wraplength=1500, text_color="#696a76", justify="center").grid(row=2, column=0, pady=(0, 10), sticky="n")
+        ctk.CTkLabel(self.container, text=tres, font=ctk.CTkFont(size=28, family='helvetica', weight="bold"), wraplength=1500, text_color="#696a76", justify="center").grid(row=3, column=0, pady=(0, 0), sticky="n")
 
         # Imagem do arco rotacionado.
         escala = 4
@@ -96,29 +97,63 @@ class AcuidadeView(ctk.CTkFrame):
             self.canvas.delete(self.feedback_id)
             self.feedback_id = None
 
+        # Alterar imagens dos botões para refletir acerto/erro
+        # Primeiro, colore todos normais
+        for ang, btn_id in self.botoes_anel.items():
+            caminho_img = opcoes[ang]
+            img_original = Image.open(caminho_img).convert("RGBA").resize((80, 80))
+            imagem_botao = ImageTk.PhotoImage(img_original)
+            self.imagens_hover[btn_id] = (imagem_botao, self.imagens_hover[btn_id][1])
+            self.canvas.itemconfigure(btn_id, image=imagem_botao)
+            # Atualiza referência para evitar garbage collection
+            self.botoes.append(imagem_botao)
+
         if escolha == self.angulo_atual:
             print(f"Acertou! Tamanho: {tamanho_atual} | Angulo: {self.angulo_atual} | Escolha: {escolha}")
             resultado += pesos_tamanho[tamanho_atual]
-            cor_feedback = "green"
+            cor_feedback = "#00a170"
             simbolo = "✓"
             if self.tamanho_index > 0:
                 self.tamanho_index -= 1
+
+            # Botão escolhido fica verde
+            caminho_verde = opcoes_verde[escolha]
+            img_verde = Image.open(caminho_verde).convert("RGBA").resize((80, 80))
+            foto_verde = ImageTk.PhotoImage(img_verde)
+            btn_id = self.botoes_anel[escolha]
+            self.canvas.itemconfigure(btn_id, image=foto_verde)
+            self.imagens_hover[btn_id] = (foto_verde, self.imagens_hover[btn_id][1])
+            self.botoes.append(foto_verde)
+
         else:
             print(f"Errou! Tamanho: {tamanho_atual} | Angulo: {self.angulo_atual} | Escolha: {escolha}")
             self.erros_por_tamanho[tamanho_atual] = self.erros_por_tamanho.get(tamanho_atual, 0) + 1
-            cor_feedback = "red"
+            cor_feedback = "#ab0037"
             simbolo = "✗"
             if self.tamanho_index < len(self.tamanhos) - 1:
                 self.tamanho_index += 1
 
-        # Adicionar botão com ✓ ou ✗ no centro do anel
-        self.feedback_id = self.canvas.create_text(
-            189, 133,
-            text=simbolo,
-            fill=cor_feedback,
-            font=("Helvetica", 48, "bold")
-        )
+            # Botão escolhido fica vermelho
+            caminho_vermelho = opcoes_vermelho[escolha]
+            img_vermelho = Image.open(caminho_vermelho).convert("RGBA").resize((80, 80))
+            foto_vermelho = ImageTk.PhotoImage(img_vermelho)
+            btn_id = self.botoes_anel[escolha]
+            self.canvas.itemconfigure(btn_id, image=foto_vermelho)
+            self.imagens_hover[btn_id] = (foto_vermelho, self.imagens_hover[btn_id][1])
+            self.botoes.append(foto_vermelho)
 
+            # Botão correto fica verde
+            caminho_verde = opcoes_verde[self.angulo_atual]
+            img_verde = Image.open(caminho_verde).convert("RGBA").resize((80, 80))
+            foto_verde = ImageTk.PhotoImage(img_verde)
+            btn_id = self.botoes_anel[self.angulo_atual]
+            self.canvas.itemconfigure(btn_id, image=foto_verde)
+            self.imagens_hover[btn_id] = (foto_verde, self.imagens_hover[btn_id][1])
+            self.botoes.append(foto_verde)                
+
+        # Adicionar botão com ✓ ou ✗ no centro do anel
+        self.feedback_id = self.canvas.create_text(189, 133, text=simbolo, fill=cor_feedback, font=("Helvetica", 48, "bold"))
+        # Vai para a próxima imagem depois de um delay de 1000 milisegundos.
         self.after(1000, self.avancar)
 
     def avancar(self):
@@ -153,10 +188,6 @@ class AcuidadeView(ctk.CTkFrame):
 
             caminho_imagem = os.path.join(caminho_botoes, f"botao_{ang}.png")
 
-            if not os.path.exists(caminho_imagem):
-                print(f"Imagem não encontrada: {caminho_imagem}")
-                continue
-
             img_original = Image.open(caminho_imagem).convert("RGBA").resize((80, 80))
             imagem_botao = ImageTk.PhotoImage(img_original)
 
@@ -168,6 +199,8 @@ class AcuidadeView(ctk.CTkFrame):
 
             img_id = self.canvas.create_image(x, y, image=imagem_botao)
 
+
+            self.botoes_anel[ang] = img_id
             self.botoes.append(imagem_botao)
             self.botoes.append(imagem_hover)
             self.imagens_hover[img_id] = (imagem_botao, imagem_hover)

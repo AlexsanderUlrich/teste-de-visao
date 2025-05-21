@@ -90,7 +90,7 @@ class DisclaimerView(ctk.CTkFrame):
             font=ctk.CTkFont(size=30),
             wraplength=1500,
             justify="center",
-            text_color="gray"
+            text_color="#696a76"
         ).grid(row=4, column=0, pady=(0, 0), padx=40, sticky="n")
 
         self.atualizar_indicadores()

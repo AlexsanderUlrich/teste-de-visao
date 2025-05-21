@@ -68,7 +68,7 @@ class DaltonismoView(ctk.CTkFrame):
             self.container,
             text="1 - Mantenha os dois olhos abertos.",
             font=ctk.CTkFont(size=28, family='helvetica'),
-            text_color="gray",
+            text_color="#696a76",
             justify="center",
             wraplength=600
         ).grid(row=1, column=0, pady=(30, 10), sticky="n")
@@ -77,7 +77,7 @@ class DaltonismoView(ctk.CTkFrame):
             self.container,
             text="2 - Mantenha-se na marcação no chão.",
             font=ctk.CTkFont(size=28, family='helvetica'),
-            text_color="gray",
+            text_color="#696a76",
             justify="center",
             wraplength=600
         ).grid(row=2, column=0, pady=(0, 10), sticky="n")
@@ -86,7 +86,7 @@ class DaltonismoView(ctk.CTkFrame):
             self.container,
             text="3 - Selecione o número que vê no circulo.",
             font=ctk.CTkFont(size=28, family='helvetica'),
-            text_color="gray",
+            text_color="#696a76",
             justify="center",
             wraplength=600
         ).grid(row=3, column=0, pady=(0, 0), sticky="n")

@@ -82,7 +82,7 @@ class SelecaoDeTestesView(ctk.CTkFrame):
             card_frame,
             text=card_data.get("descricao", "Descrição do teste."),
             font=ctk.CTkFont(size=20, family='helvetica'),
-            text_color="gray",
+            text_color="#696a76",
             wraplength=460,
             justify="center"
         ).grid(row=2, column=0, pady=(5, 10), sticky="n")
