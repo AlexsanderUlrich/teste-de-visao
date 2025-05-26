@@ -53,10 +53,7 @@ class AcuidadeView2(ctk.CTkFrame):
         if self.index == 8:
             print("Resultado do exame de acuidade no olho esquerdo:", resultado_esquerdo)
             self.definir_resultado()
-            self.index = 0
-            self.tamanho_index = 4
             self.reset()
-            self.carregar_proximo()
             self.controller.switch("resultado")
             return
 
@@ -199,8 +196,8 @@ class AcuidadeView2(ctk.CTkFrame):
         global resultado_direito
         resultado_direito = acuidade.resultado
 
-        print("Exame de acuidade visual, quantidade de acertos OD: ", resultado_direito)
-        print("Exame de acuidade visual, quantidade de acertos OE: ", resultado_esquerdo)       
+        print("Exame de acuidade visual, média ponderada do OD: ", resultado_direito)
+        print("Exame de acuidade visual, média ponderada do OE: ", resultado_esquerdo)       
               
         resultado["titulo"] = "Acuidade Visual"
         self.cor_olho_direito(resultado, resultado_direito)
@@ -212,6 +209,9 @@ class AcuidadeView2(ctk.CTkFrame):
     def reset(self):
         global resultado_esquerdo
         resultado_esquerdo = 0
+        self.index = 0
+        self.tamanho_index = 4
+        self.carregar_proximo()
         acuidade.AcuidadeView.reset(self)
     
     def apagar_resultado(self):
