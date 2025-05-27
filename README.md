@@ -10,5 +10,5 @@ O programa foi montado com base na estrura MVC, onde tem as views, controllers e
 
 ## Utilização
 - Para iniciar o programa basta executar o comando ``python app.py``
-- Caso quiser ver uma das views em específico, você pode executar o comando mesmo comando acima, más trocando o **app.py** pelo nome da view, 
+- Caso quiser ver uma das views em específico, você pode executar o mesmo comando acima, más trocando o **app.py** pelo nome da view, 
     - como por exemplo ``python daltonismo.py``
